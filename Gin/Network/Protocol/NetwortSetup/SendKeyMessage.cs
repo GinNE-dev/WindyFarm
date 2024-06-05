@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WindyFarm.Gin.Network.Utils;
-using WindyFarm.Gin.ServerLog;
+﻿using WindyFarm.Gin.Network.Utils;
 
 namespace WindyFarm.Gin.Network.Protocol.NetwortSetup
 {
@@ -22,11 +16,6 @@ namespace WindyFarm.Gin.Network.Protocol.NetwortSetup
                 Key = message.Key;
                 IV = message.IV;
             }
-        }
-
-        protected override string EncodeJson()
-        {
-            return JsonHelper.ParseString(this);
         }
 
         public override bool Execute(IMessageHandler handler)

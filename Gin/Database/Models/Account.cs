@@ -11,5 +11,5 @@ public partial class Account
 
     public Guid? PlayerId { get; set; }
 
-    public virtual Player? Player { get; set; }
+    public virtual PlayerDat? Player { get; set; }
 }

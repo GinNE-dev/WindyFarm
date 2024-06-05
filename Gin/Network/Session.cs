@@ -1,16 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NetCoreServer;
+﻿using NetCoreServer;
 using System.Text;
+using WindyFarm.Gin.Core;
 using WindyFarm.Gin.Database.Models;
 using WindyFarm.Gin.Network.Handler;
 using WindyFarm.Gin.Network.Protocol;
 using WindyFarm.Gin.Network.Protocol.NetwortSetup;
 using WindyFarm.Gin.Network.Utils;
-using WindyFarm.Gin.ServerLog;
+using WindyFarm.Gin.SystemLog;
 
 namespace WindyFarm.Gin.Network
 {
-    public class Session : TcpSession, IPlayer
+    public class Session : TcpSession
     {
         private readonly bool DebugByte = false;
         private readonly Server _server;
@@ -102,7 +102,7 @@ namespace WindyFarm.Gin.Network
             Message? message = MessagePool.Instance.ParseMessage(messageString);
             if (message == null)
             {
-                GinLogger.Warning($"Received corrupted {messageString}");
+                GinLogger.Debug($"Received corrupted {messageString}");
                 return;
             }
 
@@ -119,7 +119,7 @@ namespace WindyFarm.Gin.Network
 
         protected override void OnDisconnecting()
         {
-            //AccountManager.Instance.Remove(_account);
+            SessionManager.Instance.Remove(this);
         }
 
         protected override void OnDisconnected()

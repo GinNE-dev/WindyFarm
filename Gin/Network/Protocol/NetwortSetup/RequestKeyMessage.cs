@@ -20,10 +20,5 @@ namespace WindyFarm.Gin.Network.Protocol.NetwortSetup
         {
 
         }
-
-        protected override string EncodeJson()
-        {
-            return JsonHelper.ParseString(this);
-        }
     }
 }

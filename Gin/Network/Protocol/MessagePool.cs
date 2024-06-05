@@ -1,7 +1,8 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using WindyFarm.Gin.Network.Protocol.NetwortSetup;
 using WindyFarm.Gin.Network.Utils;
-using WindyFarm.Gin.ServerLog;
+using WindyFarm.Gin.SystemLog;
 
 namespace WindyFarm.Gin.Network.Protocol
 {
@@ -12,7 +13,6 @@ namespace WindyFarm.Gin.Network.Protocol
         private MessagePool() 
         { 
             Pool = new ConcurrentDictionary<MessageTag, Message>();
-            Init();
         }
 
         public void Init()
@@ -36,23 +36,24 @@ namespace WindyFarm.Gin.Network.Protocol
             return message?.Clone();
         }
 
-        public Message? ParseMessage(String json)
+        public Message? ParseMessage(string json)
         {
             Dummy? dummy = JsonHelper.ParseObject<Dummy>(json);
 
-            if (dummy == null) return null;
-            try
+            if (dummy == null)
             {
-                Message? message = Get(dummy.Tag);
-                message?.Decode(json);
-                return message;
+                GinLogger.Warning($"[{GetType()}]: Can't parse Message tag!");
+                return null;
             }
-            catch (Exception ex)
+            Message? message = Get(dummy.Tag);
+            if (message == null)
             {
-                GinLogger.Error(ex);
+                GinLogger.Warning($"[{GetType()}]: Message not found in pool, maybe Message with tag '{dummy.Tag}' not registered!");
+                return null;
             }
 
-            return null;
+            message.Decode(json);
+            return message;
         }
     }
 }

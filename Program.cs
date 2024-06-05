@@ -1,16 +1,15 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Net;
-using WindyFarm.Gin.Database.Models;
-using WindyFarm.Gin.ServerLog;
 using WindyFarm.Gin;
-using Microsoft.Extensions.Options;
+using WindyFarm.Gin.Database.Models;
+using WindyFarm.Gin.SystemLog;
 
 namespace WindyFarm
 {
     public class Program
     {
+        private static Server? server;
         private static int Main(string[] args)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -43,10 +42,11 @@ namespace WindyFarm
             }
 
             int port = 44433;
-            var server = new Server(IPAddress.Loopback, port, dbcontext);
+            server = new Server(IPAddress.Loopback, port, dbcontext);
             server.Start();
-
-            for (;;)
+            Console.CancelKeyPress += OnExit;
+            AppDomain.CurrentDomain.ProcessExit += OnExit;
+            for (; ; )
             {
                 string? line = Console.ReadLine();
                 if (string.IsNullOrEmpty(line))
@@ -87,6 +87,11 @@ namespace WindyFarm
                         break;
                 }
             }
+        }
+
+        private static void OnExit(object? sender, EventArgs e)
+        {
+            server?.Stop();
         }
     }
 }

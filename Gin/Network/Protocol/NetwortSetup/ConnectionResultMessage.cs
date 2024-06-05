@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WindyFarm.Gin.Network.Utils;
+﻿using WindyFarm.Gin.Network.Utils;
 
 namespace WindyFarm.Gin.Network.Protocol.NetwortSetup
 {
@@ -26,11 +21,6 @@ namespace WindyFarm.Gin.Network.Protocol.NetwortSetup
                 Granted = message.Granted;
                 ExtraMessage = message.ExtraMessage;
             }
-        }
-
-        protected override string EncodeJson()
-        {
-            return JsonHelper.ParseString<ConnectionResultMessage>(this);
         }
     }
 }

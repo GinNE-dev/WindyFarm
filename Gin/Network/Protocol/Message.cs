@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WindyFarm.Gin.ServerLog;
+using WindyFarm.Gin.Network.Utils;
+using WindyFarm.Gin.SystemLog;
 
 namespace WindyFarm.Gin.Network.Protocol
 {
@@ -32,12 +29,16 @@ namespace WindyFarm.Gin.Network.Protocol
             catch (Exception ex)
             {
                 GinLogger.Fatal(ex);
-                return String.Empty;
+                return string.Empty;
             }
         }
 
         protected abstract void DecodeJson(string json);
-        protected abstract string EncodeJson();
+        protected virtual string EncodeJson() 
+        { 
+            return JsonHelper.ParseString(this);
+        }
+
         public abstract bool Execute(IMessageHandler handler);
         public virtual Message Clone()
         {

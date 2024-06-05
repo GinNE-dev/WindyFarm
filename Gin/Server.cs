@@ -1,11 +1,10 @@
 ﻿using NetCoreServer;
-using Serilog.Parsing;
 using System.Net;
 using WindyFarm.Gin.Core;
 using WindyFarm.Gin.Database.Models;
 using WindyFarm.Gin.Network;
 using WindyFarm.Gin.Network.Protocol;
-using WindyFarm.Gin.ServerLog;
+using WindyFarm.Gin.SystemLog;
 
 namespace WindyFarm.Gin
 {
@@ -36,6 +35,7 @@ namespace WindyFarm.Gin
         {
             base.OnStarting();
             GinLogger.Info($"Server is starting...");
+            MessagePool.Instance.Init();
         }
 
         protected override void OnStarted()
@@ -64,7 +64,7 @@ namespace WindyFarm.Gin
         protected override TcpSession CreateSession()
         {
             Session userSession = new(this);
-            PlayerManager.Instance.AddPlayer(userSession);
+            Core.SessionManager.Instance.Add(userSession);
             return userSession;
         }
 
@@ -72,7 +72,7 @@ namespace WindyFarm.Gin
         {
             GinLogger.Info($"Sent \"{text}\" to all clients");
             TextMessage message = new() { Text = text };
-            foreach (var k_v in PlayerManager.Instance.Players)
+            foreach (var k_v in Core.SessionManager.Instance.Sessions)
             {
                 (k_v.Value as Session).SendMessageAsync(message);
             }
