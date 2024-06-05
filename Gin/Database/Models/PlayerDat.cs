@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WindyFarm.Gin.Database.Models;
 
-public partial class Player
+public partial class PlayerDat
 {
     public Guid Id { get; set; }
 

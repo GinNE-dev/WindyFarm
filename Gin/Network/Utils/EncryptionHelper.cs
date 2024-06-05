@@ -1,9 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.IO;
-using System.Security.Cryptography;
-using System.Text;
-using WindyFarm.Gin.ServerLog;
+﻿using System.Security.Cryptography;
+using WindyFarm.Gin.SystemLog;
 
 namespace WindyFarm.Gin.Network.Utils
 {

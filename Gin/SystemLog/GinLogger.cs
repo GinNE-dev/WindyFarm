@@ -1,7 +1,6 @@
-﻿using Azure;
-using Serilog;
+﻿using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
-namespace WindyFarm.Gin.ServerLog
+namespace WindyFarm.Gin.SystemLog
 {
     public class ConsoleColor
     {
