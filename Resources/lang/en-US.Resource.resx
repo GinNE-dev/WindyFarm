@@ -126,6 +126,12 @@
   <data name="ConfirmationPasswordNotMatch" xml:space="preserve">
     <value>Password and confirmation does not match!</value>
   </data>
+  <data name="DatabaseInternalError" xml:space="preserve">
+    <value>Some internal error occur on the server, please try again after few seconds!</value>
+  </data>
+  <data name="DisplayNameDuplicated" xml:space="preserve">
+    <value>This name has been used by other player!</value>
+  </data>
   <data name="EmailFormatInvalid" xml:space="preserve">
     <value>Email format must be 'example@gmail.com!'</value>
   </data>

@@ -88,6 +88,24 @@ namespace WindyFarm.Resources.lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Some internal error occur on the server, please try again after few seconds!.
+        /// </summary>
+        internal static string DatabaseInternalError {
+            get {
+                return ResourceManager.GetString("DatabaseInternalError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This name has been used by other player!.
+        /// </summary>
+        internal static string DisplayNameDuplicated {
+            get {
+                return ResourceManager.GetString("DisplayNameDuplicated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email format must be &apos;example@gmail.com!&apos;.
         /// </summary>
         internal static string EmailFormatInvalid {

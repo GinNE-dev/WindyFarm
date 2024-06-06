@@ -1,24 +1,24 @@
 ﻿using System.Collections.Concurrent;
 using WindyFarm.Gin.Database.Models;
 
-namespace WindyFarm.Gin.Core
+namespace WindyFarm.Gin.Game
 {
     public class AccountManager
     {
-        private readonly ConcurrentDictionary<String, Account> Accounts = new();
+        private readonly ConcurrentDictionary<string, Account> Accounts = new();
 
-        private static AccountManager? _instance;   
+        private static AccountManager? _instance;
 
         public static AccountManager Instance
         {
-            get 
-            { 
+            get
+            {
                 _instance ??= new AccountManager();
                 return _instance;
             }
         }
 
-        public bool Contains(String email) => Accounts.ContainsKey(email);
+        public bool Contains(string email) => Accounts.ContainsKey(email);
 
         public bool Contains(Account account) => account != null && Accounts.ContainsKey(account.Email);
 
@@ -27,7 +27,7 @@ namespace WindyFarm.Gin.Core
             return account != null && Accounts.TryAdd(account.Email, account);
         }
 
-        public Account? Remove(String email)
+        public Account? Remove(string email)
         {
             Accounts.TryRemove(email, out Account? account);
             return account;
@@ -35,12 +35,12 @@ namespace WindyFarm.Gin.Core
 
         public Account? Remove(Account? account)
         {
-            if(account == null) return null;
+            if (account == null) return null;
 
             Accounts.TryRemove(account.Email, out Account? removed);
             return removed;
         }
-        public Account? Get(String email)
+        public Account? Get(string email)
         {
             Accounts.TryGetValue(email, value: out Account? account);
             return account;
