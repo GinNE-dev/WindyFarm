@@ -1,4 +1,5 @@
-﻿using NetCoreServer;
+﻿using Microsoft.EntityFrameworkCore;
+using NetCoreServer;
 using System.Text;
 using WindyFarm.Gin.Core;
 using WindyFarm.Gin.Database.Models;
