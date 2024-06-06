@@ -1,4 +1,5 @@
-﻿using WindyFarm.Gin.Network.Protocol.NetwortSetup;
+using WindyFarm.Gin.Network.Protocol.Account;
+using WindyFarm.Gin.Network.Protocol.NetwortSetup;
 
 namespace WindyFarm.Gin.Network.Protocol
 {
@@ -9,5 +10,9 @@ namespace WindyFarm.Gin.Network.Protocol
         bool handleKeyConfirm(ConfirmKeyMessage message);
         bool handleConnetionResult(ConnectionResultMessage message);
         bool handleTextMessage(TextMessage message);
+        bool handleLogin(LoginMessage message);
+        bool handleLoginResult(LoginResultMessage message);
+        bool handleRegister(RegisterMessage message);   
+        bool handleRegisterResult(RegisterResultMessage message);
     }
 }

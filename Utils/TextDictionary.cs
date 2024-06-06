@@ -21,11 +21,11 @@ namespace WindyFarm.Utils
         private static ResourceManager? TextResourceManager;
         public static void Setup(string cultureCode)
         {
-            CultureInfo newCulture = new CultureInfo(cultureCode);
+            CultureInfo newCulture = new(cultureCode);
             Thread.CurrentThread.CurrentCulture = newCulture;
             Thread.CurrentThread.CurrentUICulture = newCulture;
 
-            string langDir = $"{Assembly.GetExecutingAssembly().GetName().Name}.Resources.langs.{cultureCode}.Resource";
+            string langDir = $"{Assembly.GetExecutingAssembly().GetName().Name}.Resources.lang.{cultureCode}.Resource";
             TextResourceManager = new(langDir, typeof(Program).Assembly);
         }
 

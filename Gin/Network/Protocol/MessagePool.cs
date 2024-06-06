@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using WindyFarm.Gin.Network.Protocol.Account;
 using WindyFarm.Gin.Network.Protocol.NetwortSetup;
 using WindyFarm.Gin.Network.Utils;
 using WindyFarm.Gin.SystemLog;
@@ -22,6 +23,10 @@ namespace WindyFarm.Gin.Network.Protocol
             Register(new ConfirmKeyMessage());
             Register(new ConnectionResultMessage());
             Register(new TextMessage());
+            Register(new LoginMessage());
+            Register(new LoginResultMessage());
+            Register(new RegisterMessage());
+            Register(new RegisterResultMessage());
         }
 
         public bool Register(Message? message)

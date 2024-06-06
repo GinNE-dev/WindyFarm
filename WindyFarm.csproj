@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\langs\en-US.Resource.Designer.cs">
+    <Compile Update="Resources\lang\en-US.Resource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>en-US.Resource.resx</DependentUpon>
@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\langs\en-US.Resource.resx">
+    <EmbeddedResource Update="Resources\lang\en-US.Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>en-US.Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>

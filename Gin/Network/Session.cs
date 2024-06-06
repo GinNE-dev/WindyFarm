@@ -4,9 +4,11 @@ using WindyFarm.Gin.Core;
 using WindyFarm.Gin.Database.Models;
 using WindyFarm.Gin.Network.Handler;
 using WindyFarm.Gin.Network.Protocol;
+using WindyFarm.Gin.Network.Protocol.Account;
 using WindyFarm.Gin.Network.Protocol.NetwortSetup;
 using WindyFarm.Gin.Network.Utils;
 using WindyFarm.Gin.SystemLog;
+using WindyFarm.Utils;
 
 namespace WindyFarm.Gin.Network
 {
@@ -20,6 +22,8 @@ namespace WindyFarm.Gin.Network
         private bool KeySentCompleted;
         private readonly WindyFarmDatabaseContext dbContext;
         private IMessageHandler Handler;
+        private PlayerDat? PlayerData;
+        private Account? AccountData;
 
         private bool EncryptionReady => KeySentCompleted && EncryptKey != null && EncryptIV != null;
         public Session(Server server) : base(server)
@@ -74,13 +78,57 @@ namespace WindyFarm.Gin.Network
             };
 
             SendMessage(result);
-            KeySentCompleted = true;
 
-            if (!granted)
+            if (granted)
+            {
+                KeySentCompleted = true;
+                Handler = new AccountHandler(_server, this, dbContext);
+            }
+            else
             {
                 GinLogger.Info($"Session {Id} forced to disconnect due to invalid key!");
                 base.Disconnect();
             }
+        }
+
+        public void Login(string username, string password)
+        {
+            string hashedPassword = CryptographyHelper.ComputeSha256Hash(password);
+            Account? account = dbContext.Accounts.Include(a => a.Player).FirstOrDefault(a =>
+                a.Email.Equals(username) &&
+                a.HashedPassword.Equals(hashedPassword));
+
+            LoginResultMessage resultMessage = new();
+            if (account == null)
+            {
+                resultMessage.Result = LoginResult.IncorrectLoginInfo;
+                resultMessage.ExtraMessage = TextDictionary.Get("IncorrectLoginInfo");
+                SendMessageAsync(resultMessage);
+                return;
+            }
+
+            if (AccountManager.Instance.Contains(account))
+            {
+                resultMessage.Result = LoginResult.LoginOnOtherSession;
+                resultMessage.ExtraMessage = TextDictionary.Get("AccountUsedByOther");
+                SendMessageAsync(resultMessage);
+                return;
+            }
+            AccountData = account;
+
+            PlayerDat? player = account.Player;
+            if (player == null)
+            {
+                resultMessage.Result = LoginResult.MissingCharacter;
+                resultMessage.ExtraMessage = TextDictionary.Get("CharacterNotFound");
+                SendMessageAsync(resultMessage);
+                return;
+            }
+            PlayerData = player;
+            AccountManager.Instance.Add(account);
+            GinLogger.Info($"Client {SessionId} signed as {player?.DisplayName}");
+            resultMessage.Result = LoginResult.Success;
+            SendMessageAsync(resultMessage);
         }
 
         /// <summary>
@@ -119,6 +167,7 @@ namespace WindyFarm.Gin.Network
 
         protected override void OnDisconnecting()
         {
+            AccountManager.Instance.Remove(AccountData);
             SessionManager.Instance.Remove(this);
         }
 
