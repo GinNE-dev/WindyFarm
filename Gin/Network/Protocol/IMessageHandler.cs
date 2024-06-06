@@ -1,4 +1,4 @@
-﻿using WindyFarm.Gin.Network.Protocol.Account;
+using WindyFarm.Gin.Network.Protocol.Account;
 using WindyFarm.Gin.Network.Protocol.NetwortSetup;
 
 namespace WindyFarm.Gin.Network.Protocol
