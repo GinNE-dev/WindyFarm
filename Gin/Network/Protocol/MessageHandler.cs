@@ -1,4 +1,4 @@
-﻿using WindyFarm.Gin.Network.Protocol.Login;
+﻿using WindyFarm.Gin.Network.Protocol.Account;
 using WindyFarm.Gin.Network.Protocol.NetwortSetup;
 
 namespace WindyFarm.Gin.Network.Protocol
@@ -12,5 +12,7 @@ namespace WindyFarm.Gin.Network.Protocol
         public virtual bool handleTextMessage(TextMessage message) => false;
         public virtual bool handleLogin(LoginMessage message) => false;
         public virtual bool handleLoginResult(LoginResultMessage message) => false;
+        public virtual bool handleRegister(RegisterMessage message) => false;
+        public virtual bool handleRegisterResult(RegisterResultMessage message) => false;
     }
 }

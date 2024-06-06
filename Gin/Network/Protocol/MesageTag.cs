@@ -9,12 +9,14 @@
         KeyRequest,
         KeyConfirm,
         Login,
+        RegisterAccount,
         CreateCharacter,
         PlayerDataRequest,
         ///S
         KeySend,
         ConnectionResult,
         LoginResult,
+        RegisterResult,
         NoCharacter,
         PlayerDataResponse
         

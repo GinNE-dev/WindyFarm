@@ -5,10 +5,11 @@ using WindyFarm.Gin.Core;
 using WindyFarm.Gin.Database.Models;
 using WindyFarm.Gin.Network.Handler;
 using WindyFarm.Gin.Network.Protocol;
-using WindyFarm.Gin.Network.Protocol.Login;
+using WindyFarm.Gin.Network.Protocol.Account;
 using WindyFarm.Gin.Network.Protocol.NetwortSetup;
 using WindyFarm.Gin.Network.Utils;
 using WindyFarm.Gin.SystemLog;
+using WindyFarm.Utils;
 
 namespace WindyFarm.Gin.Network
 {
@@ -82,7 +83,7 @@ namespace WindyFarm.Gin.Network
             if (granted)
             {
                 KeySentCompleted = true;
-                Handler = new LoginHandler(_server, this);
+                Handler = new AccountHandler(_server, this, dbContext);
             }
             else
             {
@@ -98,15 +99,20 @@ namespace WindyFarm.Gin.Network
                 a.Email.Equals(username) &&
                 a.HashedPassword.Equals(hashedPassword));
 
+            LoginResultMessage resultMessage = new();
             if (account == null)
             {
-                SendMessageAsync(new LoginResultMessage() { Result = LoginResult.IncorrectLoginInfo, ExtraMessage = "Email or password is incorrect!" });
+                resultMessage.Result = LoginResult.IncorrectLoginInfo;
+                resultMessage.ExtraMessage = TextDictionary.Get("IncorrectLoginInfo");
+                SendMessageAsync(resultMessage);
                 return;
             }
 
             if (AccountManager.Instance.Contains(account))
             {
-                SendMessageAsync(new LoginResultMessage() { Result = LoginResult.LoginOnOtherSession, ExtraMessage = "This account has been logged-in on other session!" });
+                resultMessage.Result = LoginResult.LoginOnOtherSession;
+                resultMessage.ExtraMessage = TextDictionary.Get("AccountUsedByOther");
+                SendMessageAsync(resultMessage);
                 return;
             }
             AccountData = account;
@@ -114,13 +120,16 @@ namespace WindyFarm.Gin.Network
             PlayerDat? player = account.Player;
             if (player == null)
             {
-                SendMessageAsync(new LoginResultMessage() { Result = LoginResult.MissingCharacter, ExtraMessage = "Please create character!" });
+                resultMessage.Result = LoginResult.MissingCharacter;
+                resultMessage.ExtraMessage = TextDictionary.Get("CharacterNotFound");
+                SendMessageAsync(resultMessage);
                 return;
             }
             PlayerData = player;
             AccountManager.Instance.Add(account);
             GinLogger.Info($"Client {SessionId} signed as {player?.DisplayName}");
-            SendMessageAsync(new LoginResultMessage() { Result = LoginResult.Success });
+            resultMessage.Result = LoginResult.Success;
+            SendMessageAsync(resultMessage);
         }
 
         /// <summary>

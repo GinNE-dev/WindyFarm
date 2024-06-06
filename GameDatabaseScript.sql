@@ -30,11 +30,11 @@ CREATE TABLE PlayerDat (
 CREATE TABLE Account (
     Email NVARCHAR(255) PRIMARY KEY,
     HashedPassword NVARCHAR(255) NOT NULL,
-    PlayerId UNIQUEIDENTIFIER UNIQUE,
+    PlayerId UNIQUEIDENTIFIER,
     CONSTRAINT FK_Account_Player FOREIGN KEY (PlayerId) REFERENCES PlayerDat(Id)
 );
 --DROP TABLE Account
---DELETE FROM [DBO].Account
+--DELETE FROM [DBO].Account WHERE Email = 'gin2002fmt@gmail.com'
 --SELECT * FROM Account
 INSERT INTO PlayerDat (Id, DisplayName, Diamond, Gold, Level, Exp) VALUES('beb5642a-cfd3-462f-9633-24862e97a692', 'Gin', 0, 0, 1, 0)
-INSERT INTO Account (Email, HashedPassword) VALUES('gin2002fsh@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a91')
+INSERT INTO Account (Email, HashedPassword, PlayerId) VALUES('gin2002fsh@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a91', 'beb5642a-cfd3-462f-9633-24862e97a692')

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WindyFarm.Gin.Network.Utils;
 
-namespace WindyFarm.Gin.Network.Protocol.Login
+namespace WindyFarm.Gin.Network.Protocol.Account
 {
     public class LoginResultMessage : Message
     {

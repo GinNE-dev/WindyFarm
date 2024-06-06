@@ -4,6 +4,7 @@ using System.Net;
 using WindyFarm.Gin;
 using WindyFarm.Gin.Database.Models;
 using WindyFarm.Gin.SystemLog;
+using WindyFarm.Utils;
 
 namespace WindyFarm
 {
@@ -12,6 +13,7 @@ namespace WindyFarm
         private static Server? server;
         private static int Main(string[] args)
         {
+            TextDictionary.Setup(CultureCode.Default);
             IConfigurationRoot configuration = new ConfigurationBuilder()
                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
