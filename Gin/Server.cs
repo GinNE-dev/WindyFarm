@@ -48,39 +48,12 @@ namespace WindyFarm.Gin
         {
             base.OnStopping();
             GinLogger.Info($"Server is stoping...");
-            SaveData();
         }
 
         protected override void OnStopped()
         {
             base.OnStopped();
             GinLogger.Info($"Server stopped!");
-        }
-
-        public void SaveData()
-        {
-            GinLogger.Info("Saving data...");
-            try
-            {
-                DbContext.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                GinLogger.Error(ex);
-            }
-        }
-
-        public void SaveDataAsync()
-        {
-            GinLogger.Info("Saving data...");
-            try
-            {
-                DbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                GinLogger.Error(ex);
-            }
         }
 
         protected virtual void OnTextMessage(string msg)

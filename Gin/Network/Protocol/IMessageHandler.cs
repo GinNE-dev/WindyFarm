@@ -14,7 +14,5 @@ namespace WindyFarm.Gin.Network.Protocol
         bool handleLoginResult(LoginResultMessage message);
         bool handleRegister(RegisterMessage message);   
         bool handleRegisterResult(RegisterResultMessage message);
-        bool handleCreateCharacter(CreateCharacterMessage message);
-        bool handleCreateCharacterResult(CreateCharacterResultMessage message);
     }
 }

@@ -17,8 +17,9 @@
         ConnectionResult,
         LoginResult,
         RegisterResult,
-        CreateCharacterResult,
+        NoCharacter,
         PlayerDataResponse
+        
     }
 }
 

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WindyFarm.Resources.lang {
+namespace WindyFarm.Resources.langs {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace WindyFarm.Resources.lang {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WindyFarm.Resources.lang.en-US.Resource", typeof(en_US_Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WindyFarm.Resources.langs.en-US.Resource", typeof(en_US_Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,74 +61,11 @@ namespace WindyFarm.Resources.lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This account has been logged-in on other session!.
-        /// </summary>
-        internal static string AccountUsedByOther {
-            get {
-                return ResourceManager.GetString("AccountUsedByOther", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Character not found. Please create character!.
-        /// </summary>
-        internal static string CharacterNotFound {
-            get {
-                return ResourceManager.GetString("CharacterNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Password and confirmation does not match!.
-        /// </summary>
-        internal static string ConfirmationPasswordNotMatch {
-            get {
-                return ResourceManager.GetString("ConfirmationPasswordNotMatch", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Email format must be &apos;example@gmail.com!&apos;.
-        /// </summary>
-        internal static string EmailFormatInvalid {
-            get {
-                return ResourceManager.GetString("EmailFormatInvalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This email has been use for other account!.
-        /// </summary>
-        internal static string EmailHasBeenUsed {
-            get {
-                return ResourceManager.GetString("EmailHasBeenUsed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Email or password is incorrect!.
-        /// </summary>
-        internal static string IncorrectLoginInfo {
-            get {
-                return ResourceManager.GetString("IncorrectLoginInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Test..........
         /// </summary>
         internal static string Test {
             get {
                 return ResourceManager.GetString("Test", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Password must be at least 6 characters long, contain at least one uppercase, lowercase, and number!.
-        /// </summary>
-        internal static string ViolationOfPasswordPrivacyPolicy {
-            get {
-                return ResourceManager.GetString("ViolationOfPasswordPrivacyPolicy", resourceCulture);
             }
         }
     }

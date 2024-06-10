@@ -17,21 +17,5 @@ public partial class PlayerDat
 
     public int Exp { get; set; }
 
-    public string Gender { get; set; } = null!;
-
-    public int MaxInventory { get; set; }
-
-    public double PositionX { get; set; }
-
-    public double PositionY { get; set; }
-
-    public double PositionZ { get; set; }
-
-    public int MapId { get; set; }
-
-    public string AccountId { get; set; } = null!;
-
-    public virtual Account Account { get; set; } = null!;
-
-    public virtual ICollection<InventorySlot> InventorySlots { get; set; } = new List<InventorySlot>();
+    public virtual Account? Account { get; set; }
 }

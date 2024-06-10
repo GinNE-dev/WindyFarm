@@ -117,28 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AccountUsedByOther" xml:space="preserve">
-    <value>This account has been logged-in on other session!</value>
-  </data>
-  <data name="CharacterNotFound" xml:space="preserve">
-    <value>Character not found. Please create character!</value>
-  </data>
-  <data name="ConfirmationPasswordNotMatch" xml:space="preserve">
-    <value>Password and confirmation does not match!</value>
-  </data>
-  <data name="EmailFormatInvalid" xml:space="preserve">
-    <value>Email format must be 'example@gmail.com!'</value>
-  </data>
-  <data name="EmailHasBeenUsed" xml:space="preserve">
-    <value>This email has been use for other account!</value>
-  </data>
-  <data name="IncorrectLoginInfo" xml:space="preserve">
-    <value>Email or password is incorrect!</value>
-  </data>
   <data name="Test" xml:space="preserve">
     <value>Test.........</value>
-  </data>
-  <data name="ViolationOfPasswordPrivacyPolicy" xml:space="preserve">
-    <value>Password must be at least 6 characters long, contain at least one uppercase, lowercase, and number!</value>
   </data>
 </root>

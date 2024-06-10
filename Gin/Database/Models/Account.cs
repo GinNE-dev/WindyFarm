@@ -9,5 +9,7 @@ public partial class Account
 
     public string HashedPassword { get; set; } = null!;
 
-    public virtual PlayerDat? PlayerDat { get; set; }
+    public Guid? PlayerId { get; set; }
+
+    public virtual PlayerDat? Player { get; set; }
 }

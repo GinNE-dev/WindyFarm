@@ -3,8 +3,6 @@ using NetCoreServer;
 using System.Text;
 using WindyFarm.Gin.Core;
 using WindyFarm.Gin.Database.Models;
-using WindyFarm.Gin.Game;
-using WindyFarm.Gin.Game.Players;
 using WindyFarm.Gin.Network.Handler;
 using WindyFarm.Gin.Network.Protocol;
 using WindyFarm.Gin.Network.Protocol.Account;
@@ -25,8 +23,8 @@ namespace WindyFarm.Gin.Network
         private bool KeySentCompleted;
         private readonly WindyFarmDatabaseContext dbContext;
         private IMessageHandler Handler;
-        public Account? AccountData { get; private set; }
-        private IPlayer? _player;
+        private PlayerDat? PlayerData;
+        private Account? AccountData;
 
         private bool EncryptionReady => KeySentCompleted && EncryptKey != null && EncryptIV != null;
         public Session(Server server) : base(server)
@@ -46,8 +44,9 @@ namespace WindyFarm.Gin.Network
             }
             else
             {
-                GinLogger.Warning("Handler is not exist, this mean there are some logic errors!");
+                GinLogger.Warning("Handler is not exist now, this mean there are some logic errors!");
             }
+
         }
 
         public void SendKey()
@@ -96,7 +95,7 @@ namespace WindyFarm.Gin.Network
         public void Login(string username, string password)
         {
             string hashedPassword = CryptographyHelper.ComputeSha256Hash(password);
-            Account? account = dbContext.Accounts.Include(a => a.PlayerDat).FirstOrDefault(a =>
+            Account? account = dbContext.Accounts.Include(a => a.Player).FirstOrDefault(a =>
                 a.Email.Equals(username) &&
                 a.HashedPassword.Equals(hashedPassword));
 
@@ -118,17 +117,17 @@ namespace WindyFarm.Gin.Network
             }
             AccountData = account;
 
-            PlayerDat? playerData = account.PlayerDat;
-            if (playerData == null)
+            PlayerDat? player = account.Player;
+            if (player == null)
             {
                 resultMessage.Result = LoginResult.MissingCharacter;
                 resultMessage.ExtraMessage = TextDictionary.Get("CharacterNotFound");
                 SendMessageAsync(resultMessage);
                 return;
             }
-            _player = new Player(_server, this, playerData);
+            PlayerData = player;
             AccountManager.Instance.Add(account);
-            GinLogger.Info($"Client {SessionId} signed as {playerData?.DisplayName}");
+            GinLogger.Info($"Client {SessionId} signed as {player?.DisplayName}");
             resultMessage.Result = LoginResult.Success;
             SendMessageAsync(resultMessage);
         }
@@ -171,7 +170,6 @@ namespace WindyFarm.Gin.Network
         {
             AccountManager.Instance.Remove(AccountData);
             SessionManager.Instance.Remove(this);
-            _server.SaveDataAsync();
         }
 
         protected override void OnDisconnected()
