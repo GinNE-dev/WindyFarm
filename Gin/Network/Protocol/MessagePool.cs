@@ -27,6 +27,7 @@ namespace WindyFarm.Gin.Network.Protocol
             Register(new LoginResultMessage());
             Register(new RegisterMessage());
             Register(new RegisterResultMessage());
+            Register(new CreateCharacterMessage());
         }
 
         public bool Register(Message? message)

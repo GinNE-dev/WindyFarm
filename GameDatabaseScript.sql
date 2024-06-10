@@ -15,26 +15,53 @@ BEGIN
 END
 
 USE WindyFarmDatabase
+--USE master
 
-CREATE TABLE PlayerDat (
-    Id UNIQUEIDENTIFIER PRIMARY KEY,
-    DisplayName NVARCHAR(255) NOT NULL,
-    Diamond INT NOT NULL CHECK (Diamond >= 0),
-    Gold INT NOT NULL CHECK (Gold >= 0),
-    Level INT NOT NULL CHECK (Level > 0),
-    Exp INT NOT NULL CHECK (Exp >= 0)
-);
---DROP TABLE PlayerDat
---SELECT * FROM [DBO].PlayerDat WHRERE Id = '54B35ACF-E588-47AC-B404-01A85D053C2F'
---DELETE FROM [DBO].PlayerDat
 CREATE TABLE Account (
     Email NVARCHAR(255) PRIMARY KEY,
     HashedPassword NVARCHAR(255) NOT NULL,
-    PlayerId UNIQUEIDENTIFIER,
-    CONSTRAINT FK_Account_Player FOREIGN KEY (PlayerId) REFERENCES PlayerDat(Id)
 );
 --DROP TABLE Account
 --DELETE FROM [DBO].Account WHERE Email = 'gin2002fmt@gmail.com'
 --SELECT * FROM Account
-INSERT INTO PlayerDat (Id, DisplayName, Diamond, Gold, Level, Exp) VALUES('beb5642a-cfd3-462f-9633-24862e97a692', 'Gin', 0, 0, 1, 0)
-INSERT INTO Account (Email, HashedPassword, PlayerId) VALUES('gin2002fsh@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a91', 'beb5642a-cfd3-462f-9633-24862e97a692')
+
+CREATE TABLE PlayerDat (
+    Id UNIQUEIDENTIFIER PRIMARY KEY,
+    DisplayName NVARCHAR(255) NOT NULL,
+    Diamond INT NOT NULL CHECK (Diamond >= 0) DEFAULT(0),
+    Gold INT NOT NULL DEFAULT(0) CHECK (Gold >= 0),
+    Level INT NOT NULL  DEFAULT(1) CHECK (Level > 0),
+    Exp INT NOT NULL DEFAULT(0) CHECK (Exp >= 0),
+	Gender NVARCHAR(50) NOT NULL,
+    CONSTRAINT CHK_Gender CHECK (Gender IN ('Male', 'Female')),
+	MaxInventory INT NOT NULL DEFAULT(25) CHECK (MaxInventory >= 25),
+	PositionX FLOAT NOT NULL DEFAULT(0),
+    PositionY FLOAT NOT NULL DEFAULT(0),
+    PositionZ FLOAT NOT NULL DEFAULT(0),
+    MapId INT NOT NULL DEFAULT(0),
+	AccountId NVARCHAR(255) UNIQUE NOT NULL,
+	CONSTRAINT FK_PlayerDat_Account FOREIGN KEY (AccountId) REFERENCES Account(Email)
+);
+--DROP TABLE PlayerDat
+--SELECT * FROM [DBO].PlayerDat WHRERE Id = '54B35ACF-E588-47AC-B404-01A85D053C2F'
+--DELETE FROM [DBO].PlayerDat
+INSERT INTO Account (Email, HashedPassword) VALUES('gin2002fsh@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a91')
+INSERT INTO PlayerDat (Id, DisplayName, Diamond, Gold, Level, Exp, Gender, PositionX, PositionY, PositionZ, MapId, AccountId) VALUES('beb5642a-cfd3-462f-9633-24862e97a692', 'Gin', 0, 0, 1, 0, 'Male', 0, 0, 0, 0, 'gin2002fsh@gmail.com')
+
+CREATE TABLE ItemDat
+(
+	Id UNIQUEIDENTIFIER PRIMARY KEY,
+	ItemType INT NOT NULL,
+	Quality INT NOT NULL CHECK (Quality > 0 AND Quality < 5)
+);
+
+CREATE TABLE InventorySlot (
+    PlayerId UNIQUEIDENTIFIER NOT NULL,
+    Slot INT NOT NULL CHECK (Slot >= 0),
+    ItemData UNIQUEIDENTIFIER,
+    StackCount INT NOT NULL CHECK (StackCount >= 0),
+    PRIMARY KEY (PlayerId, Slot),
+    CONSTRAINT FK_Inventory_Player FOREIGN KEY (PlayerId) REFERENCES PlayerDat(Id),
+    CONSTRAINT FK_Inventory_Item FOREIGN KEY (ItemData) REFERENCES ItemDat(Id)
+);
+
