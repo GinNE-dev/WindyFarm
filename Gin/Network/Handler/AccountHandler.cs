@@ -87,10 +87,51 @@ namespace WindyFarm.Gin.Network.Handler
                 GinLogger.Error(ex);
                 _dbContext.Accounts.Remove(newAccount);
                 resultMessage.Result = RegisterResult.InternalError;
-                resultMessage.ExtraMessage = "Some internal error occur on the server, please try again after few seconds!s";
+                resultMessage.ExtraMessage = TextDictionary.Get("DatabaseInternalError");
             }
 
             return _session.SendMessageAsync(resultMessage);
+        }
+
+        public override bool handleCreateCharacter(CreateCharacterMessage message)
+        {
+            PlayerDat? playerData = _dbContext.PlayerDats.FirstOrDefault(p => p.DisplayName.Equals(message.DisplayName));
+            CreateCharacterResultMessage r = new();
+            if (playerData != null) 
+            {
+                r.Result = CreateCharacterResult.DisplayNameDuplicated;
+                r.ExtraMessage = TextDictionary.Get("DisplayNameDuplicated");
+                return _session.SendMessageAsync(r);
+            }
+
+            PlayerDat newPlayerData = new PlayerDat();
+            newPlayerData.Id = Guid.NewGuid();
+            newPlayerData.DisplayName = message.DisplayName;
+            newPlayerData.Gender = message.Gender;
+
+            try
+            {
+                var accountData = _session.AccountData;
+                if (accountData != null)
+                {
+                    newPlayerData.Account = accountData;
+                    newPlayerData.AccountId = accountData.Email;
+                    _dbContext.PlayerDats.Add(newPlayerData);
+                    _dbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                GinLogger.Error(ex);
+                _dbContext.PlayerDats.Remove(newPlayerData);
+                r.Result = CreateCharacterResult.InternalError;
+                r.ExtraMessage = TextDictionary.Get("DatabaseInternalError");
+                return _session.SendMessageAsync(r);
+            }
+
+            r.Result = CreateCharacterResult.Success;
+            _session.SendMessageAsync(r);
+            return true;
         }
     }
 }
