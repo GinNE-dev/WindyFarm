@@ -6,18 +6,27 @@ using System.Text;
 using System.Threading.Tasks;
 using WindyFarm.Gin.Database.Models;
 using WindyFarm.Gin.Network;
+using WindyFarm.Gin.Network.Protocol;
 
 namespace WindyFarm.Gin.Game.Players
 {
-    internal class Player : IPlayer
+    public class Player : IPlayer
     {
         private readonly int MAX_LEVEL = 100;
+        public Guid Id => _playerData.Id;
         public string SessionId => _session.SessionId;
         public string DisplayName => _playerData.DisplayName;
         public int Gold => _playerData.Gold;
         public int Diamond => _playerData.Diamond;
         public int Level => _playerData.Level;
         public int Exp => _playerData.Exp;
+        public string Gender => _playerData.Gender;
+        public int MaxInventory => _playerData.MaxInventory;
+        public string Email => _playerData.AccountId;
+        public double PositionX => _playerData.PositionX;
+        public double PositionY => _playerData.PositionY;
+        public double PositionZ => _playerData.PositionZ;
+        public int MapId => _playerData.MapId;
         private readonly PlayerDat _playerData;
         private readonly Server _server;
         private readonly Session _session;
@@ -40,6 +49,18 @@ namespace WindyFarm.Gin.Game.Players
             }
 
             _playerData.Exp = newExp;
+        }
+
+        public bool SendMessageAsync(IMessage message)
+        {
+            return _session.SendMessageAsync(message);
+        }
+
+        public void MoveTo(double x, double y, double z)
+        {
+            _playerData.PositionX = x;
+            _playerData.PositionY = y;
+            _playerData.PositionZ = z;
         }
     }
 }

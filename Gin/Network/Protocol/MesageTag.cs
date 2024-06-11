@@ -12,6 +12,7 @@
         RegisterAccount,
         CreateCharacter,
         PlayerDataRequest,
+        PlayerMovement,
         ///S
         KeySend,
         ConnectionResult,

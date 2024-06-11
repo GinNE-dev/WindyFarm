@@ -15,7 +15,7 @@ public partial class WindyFarmDatabaseContext : DbContext
 
     public virtual DbSet<InventorySlot> InventorySlots { get; set; }
 
-    public virtual DbSet<ItemMetaDat> ItemDats { get; set; }
+    public virtual DbSet<ItemDat> ItemDats { get; set; }
 
     public virtual DbSet<PlayerDat> PlayerDats { get; set; }
 
@@ -47,7 +47,7 @@ public partial class WindyFarmDatabaseContext : DbContext
                 .HasConstraintName("FK_Inventory_Player");
         });
 
-        modelBuilder.Entity<ItemMetaDat>(entity =>
+        modelBuilder.Entity<ItemDat>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__ItemDat__3214EC07D5DDA88E");
 

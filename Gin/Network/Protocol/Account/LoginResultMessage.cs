@@ -10,8 +10,10 @@ namespace WindyFarm.Gin.Network.Protocol.Account
     public class LoginResultMessage : Message
     {
         public override MessageTag Tag => MessageTag.LoginResult;
-        public LoginResult Result;
-        public string ExtraMessage = string.Empty;
+        public LoginResult Result { get; set; }
+        public string ExtraMessage { get; set; } = string.Empty;
+        public int MapId { get; set; } = -1;
+
         public override bool Execute(IMessageHandler handler)
         {
             return handler.handleLoginResult(this);
@@ -24,6 +26,7 @@ namespace WindyFarm.Gin.Network.Protocol.Account
             {
                 Result = m.Result;
                 ExtraMessage = m.ExtraMessage;
+                MapId = m.MapId;
             }
         }
     }

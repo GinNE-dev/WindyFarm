@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using WindyFarm.Gin.Network.Protocol.Account;
+using WindyFarm.Gin.Network.Protocol.Game;
 using WindyFarm.Gin.Network.Protocol.NetwortSetup;
 using WindyFarm.Gin.Network.Utils;
 using WindyFarm.Gin.SystemLog;
@@ -28,6 +29,9 @@ namespace WindyFarm.Gin.Network.Protocol
             Register(new RegisterMessage());
             Register(new RegisterResultMessage());
             Register(new CreateCharacterMessage());
+            Register(new RequestPlayerMessage());
+            Register(new PlayerDataMessage());
+            Register(new PlayerMovementMessage());
         }
 
         public bool Register(Message? message)

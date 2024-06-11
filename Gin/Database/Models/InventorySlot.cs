@@ -13,7 +13,7 @@ public partial class InventorySlot
 
     public int StackCount { get; set; }
 
-    public virtual ItemMetaDat? ItemDataNavigation { get; set; }
+    public virtual ItemDat? ItemDataNavigation { get; set; }
 
     public virtual PlayerDat Player { get; set; } = null!;
 }
