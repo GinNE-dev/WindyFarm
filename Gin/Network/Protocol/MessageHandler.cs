@@ -21,5 +21,7 @@ namespace WindyFarm.Gin.Network.Protocol
         public virtual bool handlePlayerDataRequest(RequestPlayerMessage message) => false;
         public virtual bool handlePlayerDataResponse(PlayerDataMessage message) => false;
         public virtual bool handlePlayerMovement(PlayerMovementMessage message) => false;
+        public virtual bool handlePing(PingMessage message) => false;
+        public virtual bool handlePingReply(PingReplyMessage message) => false;
     }
 }

@@ -23,6 +23,17 @@ namespace WindyFarm.Gin.Network.Handler
             _player = player;
         }
 
+        public override bool handlePing(PingMessage message)
+        {
+            Message? msg = MessagePool.Instance.Get(MessageTag.PingReply);
+            if (msg != null && msg is PingReplyMessage)
+            {
+                _session.SendMessageAsync((PingReplyMessage) msg);
+            }
+
+            return true;
+        }
+
         public override bool handlePlayerDataRequest(RequestPlayerMessage message)
         {
             Message? msg = MessagePool.Instance.Get(MessageTag.PlayerDataResponse);
@@ -35,6 +46,7 @@ namespace WindyFarm.Gin.Network.Handler
                 dataMsg.Diamond = _player.Diamond;
                 dataMsg.Level = _player.Level;
                 dataMsg.Exp = _player.Exp;
+                dataMsg.LevelUpExp = _player.LevelUpExp;
                 dataMsg.PositionX = _player.PositionX;
                 dataMsg.PositionY = _player.PositionY;
                 dataMsg.PositionZ = _player.PositionZ;

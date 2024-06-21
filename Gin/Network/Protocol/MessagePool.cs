@@ -21,6 +21,8 @@ namespace WindyFarm.Gin.Network.Protocol
         {
             Register(new RequestKeyMessage());
             Register(new SendKeyMessage());
+            Register(new PingMessage());
+            Register(new PingReplyMessage());
             Register(new ConfirmKeyMessage());
             Register(new ConnectionResultMessage());
             Register(new TextMessage());
