@@ -127,9 +127,12 @@ namespace WindyFarm.Gin.Network
                 return;
             }
             _player = new Player(_server, this, playerData);
+            Handler = new GameHandler(_server, this, _player);
+
             AccountManager.Instance.Add(account);
             GinLogger.Info($"Client {SessionId} signed as {playerData?.DisplayName}");
             resultMessage.Result = LoginResult.Success;
+            resultMessage.MapId = _player.MapId;
             SendMessageAsync(resultMessage);
         }
 

@@ -5,16 +5,23 @@
         //B
         Unknown = 0,
         TextMessage,
+        /// C <summary>
         /// C
+        /// </summary>
         KeyRequest,
         KeyConfirm,
+        Ping,
         Login,
         RegisterAccount,
         CreateCharacter,
         PlayerDataRequest,
-        ///S
+        PlayerMovement,
+        
+        ///S <summary>
+        /// S
         KeySend,
         ConnectionResult,
+        PingReply,
         LoginResult,
         RegisterResult,
         CreateCharacterResult,

@@ -44,7 +44,7 @@ namespace WindyFarm
             }
 
             int port = 44433;
-            server = new Server(IPAddress.Loopback, port, dbcontext);
+            server = new Server(IPAddress.Any, port, dbcontext);
             server.Start();
             Console.CancelKeyPress += OnExit;
             AppDomain.CurrentDomain.ProcessExit += OnExit;

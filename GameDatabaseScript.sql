@@ -45,7 +45,7 @@ CREATE TABLE PlayerDat (
 --DROP TABLE PlayerDat
 --SELECT * FROM [DBO].PlayerDat WHRERE Id = '54B35ACF-E588-47AC-B404-01A85D053C2F'
 --DELETE FROM [DBO].PlayerDat
-INSERT INTO Account (Email, HashedPassword) VALUES('gin2002fsh@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a91')
+INSERT INTO Account (Email, HashedPassword) VALUES('gin2002fsh@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918')
 INSERT INTO PlayerDat (Id, DisplayName, Diamond, Gold, Level, Exp, Gender, PositionX, PositionY, PositionZ, MapId, AccountId) VALUES('beb5642a-cfd3-462f-9633-24862e97a692', 'Gin', 0, 0, 1, 0, 'Male', 0, 0, 0, 0, 'gin2002fsh@gmail.com')
 
 CREATE TABLE ItemDat

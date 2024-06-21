@@ -1,5 +1,6 @@
 
 using WindyFarm.Gin.Network.Protocol.Account;
+using WindyFarm.Gin.Network.Protocol.Game;
 using WindyFarm.Gin.Network.Protocol.NetwortSetup;
 
 namespace WindyFarm.Gin.Network.Protocol
@@ -17,5 +18,10 @@ namespace WindyFarm.Gin.Network.Protocol
         public virtual bool handleRegisterResult(RegisterResultMessage message) => false;
         public virtual bool handleCreateCharacter(CreateCharacterMessage message) => false;
         public virtual bool handleCreateCharacterResult(CreateCharacterResultMessage message) => false;
+        public virtual bool handlePlayerDataRequest(RequestPlayerMessage message) => false;
+        public virtual bool handlePlayerDataResponse(PlayerDataMessage message) => false;
+        public virtual bool handlePlayerMovement(PlayerMovementMessage message) => false;
+        public virtual bool handlePing(PingMessage message) => false;
+        public virtual bool handlePingReply(PingReplyMessage message) => false;
     }
 }
