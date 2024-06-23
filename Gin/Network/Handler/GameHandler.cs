@@ -100,7 +100,7 @@ namespace WindyFarm.Gin.Network.Handler
 
         public override bool handleInventoryTransaction(InventoryTransactionMessage message)
         {
-            _player.Inventory.HandleSlotTransction(message.OriginalSlotIndex, message.DestinattionSlotIndex);
+            _player.Inventory.HandleSlotTransction(message.OriginalSlotIndex, message.DestinationSlotIndex);
             _server.SaveDataAsync();
             return true;
         }

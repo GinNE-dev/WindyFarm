@@ -11,7 +11,7 @@ namespace WindyFarm.Gin.Network.Protocol.Game
     {
         public override MessageTag Tag => MessageTag.InventoryTransaction;
         public int OriginalSlotIndex { get; set; }
-        public int DestinattionSlotIndex { get; set; }
+        public int DestinationSlotIndex { get; set; }
 
         public override bool Execute(IMessageHandler handler)
         {
@@ -24,7 +24,7 @@ namespace WindyFarm.Gin.Network.Protocol.Game
             if (m is not null)
             {
                 OriginalSlotIndex = m.OriginalSlotIndex;
-                DestinattionSlotIndex = m.DestinattionSlotIndex;
+                DestinationSlotIndex = m.DestinationSlotIndex;
             }
         }
     }
