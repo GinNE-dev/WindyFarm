@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WindyFarm.Gin.Database.Models;
+using WindyFarm.Gin.Data;
+using WindyFarm.Gin.Game.Items;
 using WindyFarm.Gin.Network;
 using WindyFarm.Gin.Network.Protocol;
+using WindyFarm.Gin.SystemLog;
 
 namespace WindyFarm.Gin.Game.Players
 {
@@ -27,15 +30,21 @@ namespace WindyFarm.Gin.Game.Players
         public double PositionY => _playerData.PositionY;
         public double PositionZ => _playerData.PositionZ;
         public int MapId => _playerData.MapId;
-        private readonly PlayerDat _playerData;
+        public readonly Inventory Inventory;
+        public readonly PlayerDat _playerData;
         private readonly Server _server;
         private readonly Session _session;
-        public Player(Server server, Session session, PlayerDat playerData)
+        private readonly WindyFarmDatabaseContext _dbContext;
+        public Player(WindyFarmDatabaseContext dbContext, Server server, Session session, PlayerDat playerData)
         {
+            _dbContext = dbContext;
             _playerData = playerData;
             _server = server;
             _session = session;
+
+            Inventory = new Inventory(this, _dbContext);
         }
+
 
         public int LevelUpExp => (int)Math.Round(86.95 * Math.Pow(1.15, Level));
 

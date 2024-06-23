@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using WindyFarm.Gin;
-using WindyFarm.Gin.Database.Models;
+using WindyFarm.Gin.Data;
 using WindyFarm.Gin.SystemLog;
 using WindyFarm.Utils;
 

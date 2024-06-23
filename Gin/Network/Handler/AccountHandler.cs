@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using WindyFarm.Gin.Database.Models;
+using WindyFarm.Gin.Data;
 using WindyFarm.Gin.Network.Protocol;
 using WindyFarm.Gin.Network.Protocol.Account;
 using WindyFarm.Gin.Network.Utils;

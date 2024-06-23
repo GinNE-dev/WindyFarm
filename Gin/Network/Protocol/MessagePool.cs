@@ -34,11 +34,14 @@ namespace WindyFarm.Gin.Network.Protocol
             Register(new RequestPlayerMessage());
             Register(new PlayerDataMessage());
             Register(new PlayerMovementMessage());
+            Register(new InventoryRequestMessage());
+            Register(new InventoryResponseMessage());
+            Register(new InventoryTransactionMessage());
         }
 
         public bool Register(Message? message)
         {
-            if(message == null) return false;
+            if(message is null) return false;
             return Pool.TryAdd(message.Tag, message);
         }
 
@@ -52,18 +55,19 @@ namespace WindyFarm.Gin.Network.Protocol
         {
             Dummy? dummy = JsonHelper.ParseObject<Dummy>(json);
 
-            if (dummy == null)
+            if (dummy is null)
             {
                 GinLogger.Warning($"[{GetType()}]: Can't parse Message tag!");
                 return null;
             }
             Message? message = Get(dummy.Tag);
-            if (message == null)
+            if (message is null)
             {
                 GinLogger.Warning($"[{GetType()}]: Message not found in pool, maybe Message with tag '{dummy.Tag}' not registered!");
                 return null;
             }
 
+            message = message.Clone();
             message.Decode(json);
             return message;
         }

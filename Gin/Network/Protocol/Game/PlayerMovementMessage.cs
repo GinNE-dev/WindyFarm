@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindyFarm.Gin.Network.Protocol;
 using WindyFarm.Gin.Network.Utils;
 
 namespace WindyFarm.Gin.Network.Protocol.Game
