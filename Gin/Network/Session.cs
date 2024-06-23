@@ -189,14 +189,14 @@ namespace WindyFarm.Gin.Network
         public bool SendMessageAsync(IMessage message)
         {
             if (message == null) return false;
-            string strMessage = message.Endcode();
+            string strMessage = message.Encode();
             GinLogger.Debug($"Sent {strMessage} to {SessionId}");
             return SendAsync(strMessage);
         }
 
         public long SendMessage(IMessage message)
         {
-            return Send(message.Endcode());
+            return Send(message.Encode());
         }
 
         public override long Send(byte[] buffer)

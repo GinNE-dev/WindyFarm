@@ -80,3 +80,21 @@ VALUES
 ('beb5642a-cfd3-462f-9633-24862e97a692', 5, 'beb5642a-cfd3-462f-9633-24862e97a692', 245);
 --SELECT * FROM InventorySlotDat
 --DELETE FROM InventorySlotDat
+
+CREATE TABLE FarmlandDat (
+    OwnerId UNIQUEIDENTIFIER,
+    PlotIndex INT CHECK (PlotIndex >= 0),
+    PlotState VARCHAR(10) CHECK (PlotState IN ('Wild', 'Messed', 'Tilled', 'Planted')) DEFAULT('Wild') NOT NULL,
+	Fertilized BIT DEFAULT(0)  NOT NULL,
+    Seed INT CHECK (Seed >= 0) DEFAULT(0) NOT NULL,
+    CropQuality INT CHECK (CropQuality >= 0 AND CropQuality <= 5) DEFAULT(0) NOT NULL,
+    HarvestAt DATETIME DEFAULT DATEADD(YEAR, 100, GETDATE()) NOT NULL,
+    PRIMARY KEY (OwnerId, PlotIndex),
+    FOREIGN KEY (OwnerId) REFERENCES PlayerDat(Id)
+);
+
+INSERT INTO FarmlandDat(OwnerId, PlotIndex) VALUES
+('BEB5642A-CFD3-462F-9633-24862E97A692', 0);
+--DROP TABLE FarmlandDat
+--SELECT * FROM FarmlandDat
+--DELETE FROM FarmlandDat

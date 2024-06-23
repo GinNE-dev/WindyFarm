@@ -13,6 +13,8 @@ public partial class WindyFarmDatabaseContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
+    public virtual DbSet<FarmlandDat> FarmlandDats { get; set; }
+
     public virtual DbSet<InventorySlotDat> InventorySlotDats { get; set; }
 
     public virtual DbSet<ItemDat> ItemDats { get; set; }
@@ -23,7 +25,7 @@ public partial class WindyFarmDatabaseContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Email).HasName("PK__Account__A9D1053563AE458C");
+            entity.HasKey(e => e.Email).HasName("PK__Account__A9D10535BB91A7BF");
 
             entity.ToTable("Account");
 
@@ -31,9 +33,29 @@ public partial class WindyFarmDatabaseContext : DbContext
             entity.Property(e => e.HashedPassword).HasMaxLength(255);
         });
 
+        modelBuilder.Entity<FarmlandDat>(entity =>
+        {
+            entity.HasKey(e => new { e.OwnerId, e.PlotIndex }).HasName("PK__Farmland__19DA69EB1C29BCC8");
+
+            entity.ToTable("FarmlandDat");
+
+            entity.Property(e => e.HarvestAt)
+                .HasDefaultValueSql("(dateadd(year,(100),getdate()))")
+                .HasColumnType("datetime");
+            entity.Property(e => e.PlotState)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasDefaultValue("Wild");
+
+            entity.HasOne(d => d.Owner).WithMany(p => p.FarmlandDats)
+                .HasForeignKey(d => d.OwnerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__FarmlandD__Owner__4F47C5E3");
+        });
+
         modelBuilder.Entity<InventorySlotDat>(entity =>
         {
-            entity.HasKey(e => new { e.PlayerId, e.Slot }).HasName("PK__Inventor__3189CE5C20854657");
+            entity.HasKey(e => new { e.PlayerId, e.Slot }).HasName("PK__Inventor__3189CE5C116F2BD8");
 
             entity.ToTable("InventorySlotDat");
 
@@ -49,7 +71,7 @@ public partial class WindyFarmDatabaseContext : DbContext
 
         modelBuilder.Entity<ItemDat>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ItemDat__3214EC07039E49D8");
+            entity.HasKey(e => e.Id).HasName("PK__ItemDat__3214EC075B62F8C3");
 
             entity.ToTable("ItemDat");
 
@@ -58,11 +80,11 @@ public partial class WindyFarmDatabaseContext : DbContext
 
         modelBuilder.Entity<PlayerDat>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PlayerDa__3214EC07F012D158");
+            entity.HasKey(e => e.Id).HasName("PK__PlayerDa__3214EC07B55BA509");
 
             entity.ToTable("PlayerDat");
 
-            entity.HasIndex(e => e.AccountId, "UQ__PlayerDa__349DA5A7F6EA7F10").IsUnique();
+            entity.HasIndex(e => e.AccountId, "UQ__PlayerDa__349DA5A7F031D011").IsUnique();
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.AccountId).HasMaxLength(255);

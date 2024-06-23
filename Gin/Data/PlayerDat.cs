@@ -33,5 +33,7 @@ public partial class PlayerDat
 
     public virtual Account Account { get; set; } = null!;
 
+    public virtual ICollection<FarmlandDat> FarmlandDats { get; set; } = new List<FarmlandDat>();
+
     public virtual ICollection<InventorySlotDat> InventorySlotDats { get; set; } = new List<InventorySlotDat>();
 }

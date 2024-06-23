@@ -18,6 +18,7 @@
         PlayerMovement,
         InventoryDataRequest,
         InventoryTransaction,
+        FarmlandDataRequest,
 
         ///S <summary>
         /// S
@@ -28,7 +29,8 @@
         RegisterResult,
         CreateCharacterResult,
         PlayerDataResponse,
-        InventoryDataResponse
+        InventoryDataResponse,
+        FarmlandDataResponse
     }
 }
 

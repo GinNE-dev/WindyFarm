@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WindyFarm.Gin.Data;
+using WindyFarm.Gin.Game.Farming;
 using WindyFarm.Gin.Game.Items;
 using WindyFarm.Gin.Network;
 using WindyFarm.Gin.Network.Protocol;
@@ -35,6 +36,7 @@ namespace WindyFarm.Gin.Game.Players
         private readonly Server _server;
         private readonly Session _session;
         private readonly WindyFarmDatabaseContext _dbContext;
+        public readonly Farm FarmManager;
         public Player(WindyFarmDatabaseContext dbContext, Server server, Session session, PlayerDat playerData)
         {
             _dbContext = dbContext;
@@ -43,6 +45,7 @@ namespace WindyFarm.Gin.Game.Players
             _session = session;
 
             Inventory = new Inventory(this, _dbContext);
+            FarmManager = new Farm(this, _dbContext);
         }
 
 

@@ -25,5 +25,7 @@ namespace WindyFarm.Gin.Network.Protocol
         bool handleInventoryRequest(InventoryRequestMessage message);
         bool handleInventoryResponse(InventoryResponseMessage message);
         bool handleInventoryTransaction(InventoryTransactionMessage message);
+        bool handleFarmlandRequest(FarmlandRequestMessage message);
+        bool handleFarmlandResponse(FarmlandResponseMessage message);
     }
 }

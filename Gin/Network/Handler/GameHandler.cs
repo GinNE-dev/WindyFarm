@@ -104,5 +104,30 @@ namespace WindyFarm.Gin.Network.Handler
             _server.SaveDataAsync();
             return true;
         }
+
+        public override bool handleFarmlandRequest(FarmlandRequestMessage message)
+        {
+            FarmlandResponseMessage m = new FarmlandResponseMessage();
+            var farm = _player.FarmManager;
+            var farmlandSlots = farm.GetOrderedPlots();
+            foreach (var slot in farmlandSlots)
+            {
+                m.Seeds.Add(slot.Seed);
+                m.CropQualities.Add(slot.CropQuality);
+                m.FertilizeStats.Add(slot.Fertilized);
+                var seed = ItemReplicator.Get(slot.Seed);
+                if (seed is Seed) 
+                {
+                    m.GrownTimes.Add(((Seed) seed).StageGrowingTimes.Sum() - (slot.HavestAt.Second - DateTime.Now.Second));
+                }
+                else
+                {
+                    m.GrownTimes.Add(0);
+                }
+            }
+
+            _player.SendMessageAsync(m);
+            return true;
+        }
     }
 }
