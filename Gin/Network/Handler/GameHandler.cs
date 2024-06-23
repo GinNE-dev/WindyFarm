@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindyFarm.Gin.Game.Items;
 using WindyFarm.Gin.Game.Players;
 using WindyFarm.Gin.Network.Protocol;
 using WindyFarm.Gin.Network.Protocol.Game;
@@ -14,13 +15,13 @@ namespace WindyFarm.Gin.Network.Handler
     {
         private readonly Server _server;
         private readonly Session _session;
-        private readonly IPlayer _player;
+        private readonly Player _player;
 
         public GameHandler(Server server, Session session, IPlayer player) 
         {
             _server = server;
             _session = session;
-            _player = player;
+            _player = (Player) player;
         }
 
         public override bool handlePing(PingMessage message)
@@ -67,6 +68,40 @@ namespace WindyFarm.Gin.Network.Handler
         public override bool handlePlayerMovement(PlayerMovementMessage message)
         {
             _player.MoveTo(message.PositionX, message.PositionY, message.PositionZ);
+            return true;
+        }
+
+        public override bool handleInventoryRequest(InventoryRequestMessage message)
+        {
+            var inv = _player.Inventory;
+
+            Message? msg = MessagePool.Instance.Get(MessageTag.InventoryDataResponse);
+            if (msg != null && msg is InventoryResponseMessage)
+            {
+                InventoryResponseMessage m = (InventoryResponseMessage)msg;
+                var slotIndexes = inv.Slots.Keys.Order();
+                m.ItemIds = new(slotIndexes.Count());
+                m.StackCounts = new(slotIndexes.Count());
+                m.MetaDataList = new(slotIndexes.Count());
+
+                foreach (int slotIndex in slotIndexes)
+                {
+                    var slot = inv.Slots[slotIndex];
+                    m.ItemIds.Add(slot.Item.Id);
+                    m.StackCounts.Add(slot.StackCount);
+                    if(slot.SlotData.ItemDat is not null) m.MetaDataList.Add(slot.SlotData.ItemDat);
+                }
+
+                _player.SendMessageAsync(m);
+            }
+            
+            return true;
+        }
+
+        public override bool handleInventoryTransaction(InventoryTransactionMessage message)
+        {
+            _player.Inventory.HandleSlotTransction(message.OriginalSlotIndex, message.DestinattionSlotIndex);
+            _server.SaveDataAsync();
             return true;
         }
     }

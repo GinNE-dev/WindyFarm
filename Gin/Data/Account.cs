@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WindyFarm.Gin.Database.Models;
+namespace WindyFarm.Gin.Data;
 
 public partial class Account
 {

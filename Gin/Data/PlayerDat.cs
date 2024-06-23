@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WindyFarm.Gin.Database.Models;
+namespace WindyFarm.Gin.Data;
 
 public partial class PlayerDat
 {
@@ -33,5 +33,5 @@ public partial class PlayerDat
 
     public virtual Account Account { get; set; } = null!;
 
-    public virtual ICollection<InventorySlot> InventorySlots { get; set; } = new List<InventorySlot>();
+    public virtual ICollection<InventorySlotDat> InventorySlotDats { get; set; } = new List<InventorySlotDat>();
 }

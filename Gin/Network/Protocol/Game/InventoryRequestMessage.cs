@@ -4,21 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WindyFarm.Gin.Network.Protocol;
-using WindyFarm.Gin.Network.Utils;
 
 namespace WindyFarm.Gin.Network.Protocol.Game
 {
-    public class RequestPlayerMessage : Message
+    public class InventoryRequestMessage : Message
     {
-        public override MessageTag Tag => MessageTag.PlayerDataRequest;
+        public override MessageTag Tag => MessageTag.InventoryDataRequest;
 
         public override bool Execute(IMessageHandler handler)
         {
-            return handler.handlePlayerDataRequest(this);
+            return handler.handleInventoryRequest(this);
         }
 
         protected override void DecodeJson(string json)
         {
+
         }
     }
 }

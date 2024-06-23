@@ -1,7 +1,8 @@
 ﻿using NetCoreServer;
 using System.Net;
 using WindyFarm.Gin.Core;
-using WindyFarm.Gin.Database.Models;
+using WindyFarm.Gin.Data;
+using WindyFarm.Gin.Game.Items;
 using WindyFarm.Gin.Network;
 using WindyFarm.Gin.Network.Protocol;
 using WindyFarm.Gin.SystemLog;
@@ -17,6 +18,7 @@ namespace WindyFarm.Gin
         {
             DbContext = dbContext;
             Instance = this;
+            ItemReplicator.Init();
         }
 
 
@@ -28,6 +30,7 @@ namespace WindyFarm.Gin
                 GinLogger.Warning("Database not found, server cannot start!");
                 return false;
             }
+
             return base.Start();
         }
 
@@ -70,9 +73,9 @@ namespace WindyFarm.Gin
             }
         }
 
-        public void SaveDataAsync()
+        public void SaveDataAsync(bool notify = false)
         {
-            GinLogger.Info("Saving data...");
+            if(notify) GinLogger.Info("Saving data...");
             try
             {
                 DbContext.SaveChangesAsync();
