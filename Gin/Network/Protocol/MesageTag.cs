@@ -16,7 +16,9 @@
         CreateCharacter,
         PlayerDataRequest,
         PlayerMovement,
-        
+        InventoryDataRequest,
+        InventoryTransaction,
+
         ///S <summary>
         /// S
         KeySend,
@@ -25,7 +27,8 @@
         LoginResult,
         RegisterResult,
         CreateCharacterResult,
-        PlayerDataResponse
+        PlayerDataResponse,
+        InventoryDataResponse
     }
 }
 

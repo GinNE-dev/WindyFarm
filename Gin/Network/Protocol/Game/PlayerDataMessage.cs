@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindyFarm.Gin.Network.Protocol;
 using WindyFarm.Gin.Network.Utils;
 
 namespace WindyFarm.Gin.Network.Protocol.Game
@@ -45,7 +46,7 @@ namespace WindyFarm.Gin.Network.Protocol.Game
         protected override void DecodeJson(string json)
         {
             PlayerDataMessage? msg = JsonHelper.ParseObject<PlayerDataMessage>(json);
-            if(msg != null)
+            if (msg != null)
             {
                 Id = msg.Id;
                 DisplayName = msg.DisplayName;

@@ -1,4 +1,3 @@
-
 using WindyFarm.Gin.Network.Protocol.Account;
 using WindyFarm.Gin.Network.Protocol.Game;
 using WindyFarm.Gin.Network.Protocol.NetwortSetup;
@@ -23,5 +22,8 @@ namespace WindyFarm.Gin.Network.Protocol
         public virtual bool handlePlayerMovement(PlayerMovementMessage message) => false;
         public virtual bool handlePing(PingMessage message) => false;
         public virtual bool handlePingReply(PingReplyMessage message) => false;
+        public virtual bool handleInventoryRequest(InventoryRequestMessage message) => false;
+        public virtual bool handleInventoryResponse(InventoryResponseMessage message) => false;
+        public virtual bool handleInventoryTransaction(InventoryTransactionMessage message) => false;
     }
 }

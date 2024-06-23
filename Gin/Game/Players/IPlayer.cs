@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WindyFarm.Gin.Database.Models;
+using WindyFarm.Gin.Data;
 using WindyFarm.Gin.Network;
 using WindyFarm.Gin.Network.Protocol;
 

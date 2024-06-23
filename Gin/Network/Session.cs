@@ -2,7 +2,7 @@
 using NetCoreServer;
 using System.Text;
 using WindyFarm.Gin.Core;
-using WindyFarm.Gin.Database.Models;
+using WindyFarm.Gin.Data;
 using WindyFarm.Gin.Game;
 using WindyFarm.Gin.Game.Players;
 using WindyFarm.Gin.Network.Handler;
@@ -119,6 +119,7 @@ namespace WindyFarm.Gin.Network
             AccountData = account;
 
             PlayerDat? playerData = account.PlayerDat;
+     
             if (playerData == null)
             {
                 resultMessage.Result = LoginResult.MissingCharacter;
@@ -126,7 +127,7 @@ namespace WindyFarm.Gin.Network
                 SendMessageAsync(resultMessage);
                 return;
             }
-            _player = new Player(_server, this, playerData);
+            _player = new Player(dbContext, _server, this, playerData);
             Handler = new GameHandler(_server, this, _player);
 
             AccountManager.Instance.Add(account);

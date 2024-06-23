@@ -1,5 +1,5 @@
 ﻿using System.Collections.Concurrent;
-using WindyFarm.Gin.Database.Models;
+using WindyFarm.Gin.Data;
 
 namespace WindyFarm.Gin.Game
 {

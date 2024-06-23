@@ -52,16 +52,31 @@ CREATE TABLE ItemDat
 (
 	Id UNIQUEIDENTIFIER PRIMARY KEY,
 	ItemType INT NOT NULL,
-	Quality INT NOT NULL CHECK (Quality > 0 AND Quality < 5)
+	Quality INT NOT NULL CHECK (Quality >= 0 AND Quality < 5)
 );
 
-CREATE TABLE InventorySlot (
+INSERT INTO ItemDat(Id, ItemType, Quality) 
+VALUES
+--('00000000-0000-0000-0000-000000000000', 0, 1),
+('beb5642a-cfd3-462f-9633-24862e97a691', 1, 1),
+('beb5642a-cfd3-462f-9633-24862e97a692', 2, 2)
+--SELECT * FROM ItemDat WHERE Id = '304913B9-BC83-41AF-8754-4CD1E018F3BE'
+--DELETE FROM ItemDat
+CREATE TABLE InventorySlotDat (
     PlayerId UNIQUEIDENTIFIER NOT NULL,
     Slot INT NOT NULL CHECK (Slot >= 0),
-    ItemData UNIQUEIDENTIFIER,
+    ItemDatId UNIQUEIDENTIFIER,
     StackCount INT NOT NULL CHECK (StackCount >= 0),
     PRIMARY KEY (PlayerId, Slot),
     CONSTRAINT FK_Inventory_Player FOREIGN KEY (PlayerId) REFERENCES PlayerDat(Id),
-    CONSTRAINT FK_Inventory_Item FOREIGN KEY (ItemData) REFERENCES ItemDat(Id)
+    CONSTRAINT FK_Inventory_Item FOREIGN KEY (ItemDatId) REFERENCES ItemDat(Id)
 );
 
+INSERT INTO InventorySlotDat(PlayerId, Slot, ItemDatId, StackCount)
+VALUES
+('beb5642a-cfd3-462f-9633-24862e97a692', 0, 'beb5642a-cfd3-462f-9633-24862e97a691', 111),
+('beb5642a-cfd3-462f-9633-24862e97a692', 2, 'beb5642a-cfd3-462f-9633-24862e97a691', 123),
+('beb5642a-cfd3-462f-9633-24862e97a692', 4, 'beb5642a-cfd3-462f-9633-24862e97a692', 976),
+('beb5642a-cfd3-462f-9633-24862e97a692', 5, 'beb5642a-cfd3-462f-9633-24862e97a692', 245);
+--SELECT * FROM InventorySlotDat
+--DELETE FROM InventorySlotDat

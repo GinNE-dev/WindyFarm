@@ -22,5 +22,8 @@ namespace WindyFarm.Gin.Network.Protocol
         bool handlePlayerMovement(PlayerMovementMessage message);
         bool handlePing(PingMessage message);
         bool handlePingReply(PingReplyMessage message);
+        bool handleInventoryRequest(InventoryRequestMessage message);
+        bool handleInventoryResponse(InventoryResponseMessage message);
+        bool handleInventoryTransaction(InventoryTransactionMessage message);
     }
 }
