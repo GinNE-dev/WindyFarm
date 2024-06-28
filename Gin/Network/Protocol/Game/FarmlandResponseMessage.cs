@@ -14,6 +14,7 @@ namespace WindyFarm.Gin.Network.Protocol.Game
         public List<int> CropQualities { get; set; } = new();
         public List<bool> FertilizeStats { get; set; } = new();
         public List<int> GrownTimes { get; set; } = new();
+        public List<string> PlotStates { get; set; } = new();
         public FarmlandResponseMessage() { }
         public override bool Execute(IMessageHandler handler) => handler.handleFarmlandResponse(this);
 
@@ -26,6 +27,7 @@ namespace WindyFarm.Gin.Network.Protocol.Game
                 CropQualities = m.CropQualities;
                 FertilizeStats = m.FertilizeStats;
                 GrownTimes = m.GrownTimes;
+                PlotStates = m.PlotStates;
             }
         }
     }

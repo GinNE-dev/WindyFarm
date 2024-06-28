@@ -57,5 +57,35 @@ namespace WindyFarm.Gin.Game.Players
         {
             return StackCount == 0 && (Item is null || Item is VoidItem);
         }
+
+        private object slotSafe = new object();
+
+        public Item? TakeOne()
+        {
+            return Take(1);
+        }
+
+        public Item? Take(int qty)
+        {
+            if(qty < 0) return null;
+
+            lock (slotSafe)
+            {
+                if (SlotData.StackCount < qty)
+                {
+                    return null;
+                }
+                else if (SlotData.StackCount == qty)
+                {
+                    var item = Item;
+                    RemoveItem();
+                    return item;
+                }else
+                {
+                    SlotData.StackCount -= qty;
+                    return Item;
+                }
+            }
+        }
     }
 }

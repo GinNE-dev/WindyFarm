@@ -19,7 +19,7 @@
         InventoryDataRequest,
         InventoryTransaction,
         FarmlandDataRequest,
-
+        FarmlandTransaction,
         ///S <summary>
         /// S
         KeySend,
@@ -30,7 +30,8 @@
         CreateCharacterResult,
         PlayerDataResponse,
         InventoryDataResponse,
-        FarmlandDataResponse
+        FarmlandDataResponse,
+        FarmlandTransactionResult
     }
 }
 

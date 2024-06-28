@@ -10,6 +10,6 @@ namespace WindyFarm.Gin.Game.Items
     {
         public abstract List<int> StageGrowingTimes { get; }
         public override string Description => "Plant to grow plant";
-        public abstract Item HavestProduct { get; }
+        public abstract Item HarvestProduct { get; }
     }
 }

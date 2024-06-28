@@ -120,5 +120,86 @@ namespace WindyFarm.Gin.Game.Players
                 }   
             }
         }
+
+        public Item? FindItemUnique(int itemId, Guid dataId) 
+            => Slots.FirstOrDefault(s=>s.Value.Item.Id.Equals(itemId) && s.Value.Item.DataId.Equals(dataId)).Value.Item;
+
+        private object slotSafe = new();
+        public Item? TryTakeItem(int itemId, Guid dataId, int qty)
+        {
+            lock (slotSafe)
+            {
+                var slot = Slots.FirstOrDefault(
+                    s => s.Value.Item.Id.Equals(itemId) 
+                    && s.Value.Item.DataId.Equals(dataId))
+                    .Value;
+
+                if (slot is null) return null;
+                return slot.Take(qty);
+            }
+        }
+
+        public Item? TryTakeOne(int itemId, Guid dataId)
+        {
+            return TryTakeItem(itemId, dataId, 1);
+        }
+
+        public bool IsAvailableFor(Item item, int qty)
+        {
+            lock (slotSafe)
+            {
+                var sameItemAvailable = Slots.Values
+                    .Where(s => s.Item.Equals(item))
+                    .OrderBy(s => s.StackCount).Sum(s=> MAX_STACK_COUNT-s.StackCount);
+
+                var emptyAvailable = FindEmtySlot() * MAX_STACK_COUNT;
+
+                return qty - (sameItemAvailable+emptyAvailable) <= 0;
+            }
+        }
+
+        public InventorySlot? FirstEmptySlot() => Slots.Values.FirstOrDefault(s => s.IsEmpty());
+        public int FindEmtySlot() => Slots.Values.Count(s=>s.IsEmpty());
+
+        public bool TryPutItem(Item item, int qty)
+        {
+            lock (slotSafe)
+            {
+                if(!IsAvailableFor(item, qty)) return false;
+
+                var sameItemSlots = Slots.Values
+                    .Where(s => s.Item.Equals(item)).ToList();
+
+                int remaining = qty;
+                foreach (var slot in sameItemSlots)
+                {
+                    if (remaining <= 0) return true;
+                    item.AssignMetaData(slot.Item.itemData);
+
+                    var putAvl = Math.Min(MAX_STACK_COUNT-slot.StackCount, remaining);
+                    slot.PutItem(slot.Item, slot.StackCount + putAvl);
+                    remaining -= putAvl;
+                }
+
+                if (remaining > 0)
+                {
+                    var emtySlots = Slots.Values.Where(s => s.Item is VoidItem).ToList();
+                    foreach (var slot in emtySlots)
+                    {
+                        if (remaining <= 0) return true;
+                        var putAvl = Math.Min(MAX_STACK_COUNT, qty);
+                        slot.PutItem(item, putAvl);
+                        remaining -= putAvl;
+                    }
+                }               
+                
+                return true;    
+            }
+        }
+
+        public bool TryPutOne(Item item)
+        {
+            return TryPutItem(item, 1);
+        }
     }
 }

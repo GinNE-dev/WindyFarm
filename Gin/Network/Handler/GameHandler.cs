@@ -37,31 +37,9 @@ namespace WindyFarm.Gin.Network.Handler
 
         public override bool handlePlayerDataRequest(RequestPlayerMessage message)
         {
-            Message? msg = MessagePool.Instance.Get(MessageTag.PlayerDataResponse);
-            if(msg != null && msg is PlayerDataMessage)
-            {
-                PlayerDataMessage dataMsg = (PlayerDataMessage) msg;
-                dataMsg.Id = _player.Id;
-                dataMsg.DisplayName = _player.DisplayName;
-                dataMsg.Gold = _player.Gold;
-                dataMsg.Diamond = _player.Diamond;
-                dataMsg.Level = _player.Level;
-                dataMsg.Exp = _player.Exp;
-                dataMsg.LevelUpExp = _player.LevelUpExp;
-                dataMsg.PositionX = _player.PositionX;
-                dataMsg.PositionY = _player.PositionY;
-                dataMsg.PositionZ = _player.PositionZ;
-                dataMsg.MaxInventory = _player.MaxInventory;
-                dataMsg.Gender = _player.Gender;
-                dataMsg.AccountId = _player.Email;
-                dataMsg.MapId = _player.MapId;
-
-                _session.SendMessageAsync(dataMsg);
-            }else
-            {
-                GinLogger.Debug($"{GetType().Name}: PlayerDataMessage not found!");
-            }
-            
+            _player.SendPosition();
+            _player.SendStats();
+       
             return true;
         }
 
@@ -72,30 +50,8 @@ namespace WindyFarm.Gin.Network.Handler
         }
 
         public override bool handleInventoryRequest(InventoryRequestMessage message)
-        {
-            var inv = _player.Inventory;
-
-            Message? msg = MessagePool.Instance.Get(MessageTag.InventoryDataResponse);
-            if (msg != null && msg is InventoryResponseMessage)
-            {
-                InventoryResponseMessage m = (InventoryResponseMessage)msg;
-                var slotIndexes = inv.Slots.Keys.Order();
-                m.ItemIds = new(slotIndexes.Count());
-                m.StackCounts = new(slotIndexes.Count());
-                m.MetaDataList = new(slotIndexes.Count());
-
-                foreach (int slotIndex in slotIndexes)
-                {
-                    var slot = inv.Slots[slotIndex];
-                    m.ItemIds.Add(slot.Item.Id);
-                    m.StackCounts.Add(slot.StackCount);
-                    if(slot.SlotData.ItemDat is not null) m.MetaDataList.Add(slot.SlotData.ItemDat);
-                }
-
-                _player.SendMessageAsync(m);
-            }
-            
-            return true;
+        {        
+            return _player.SendInventory();
         }
 
         public override bool handleInventoryTransaction(InventoryTransactionMessage message)
@@ -115,18 +71,44 @@ namespace WindyFarm.Gin.Network.Handler
                 m.Seeds.Add(slot.Seed);
                 m.CropQualities.Add(slot.CropQuality);
                 m.FertilizeStats.Add(slot.Fertilized);
-                var seed = ItemReplicator.Get(slot.Seed);
-                if (seed is Seed) 
+                m.PlotStates.Add(slot.PlotState);
+                var item = ItemReplicator.Get(slot.Seed);
+                if (item is Seed) 
                 {
-                    m.GrownTimes.Add(((Seed) seed).StageGrowingTimes.Sum() - (slot.HavestAt.Second - DateTime.Now.Second));
+                    m.GrownTimes.Add(Math.Min((int) (DateTime.Now - slot.PlantedAt).TotalSeconds, ((Seed)item).StageGrowingTimes.Sum()));
                 }
                 else
                 {
                     m.GrownTimes.Add(0);
+                    
                 }
             }
 
             _player.SendMessageAsync(m);
+            return true;
+        }
+
+        public override bool handleFarmlandTransaction(FarmlandTransactionMessage message)
+        {
+            var farm = _player.FarmManager;
+            switch(message.Action)
+            {
+                case FarmlandAction.Till:
+                    farm.TillPlot(message.PlotIndex);
+                    break;
+                case FarmlandAction.Harvest:
+                    farm.Harvest(message.PlotIndex);
+                    break;
+                case FarmlandAction.Plant:
+                    farm.SeedPlot(message.PlotIndex, message.Seed, message.SeedDataId);
+                    break;
+                case FarmlandAction.Buy:
+                    farm.BuyPlot(message.PlotIndex);
+                    break;
+                default:
+                    return false;
+            }
+
             return true;
         }
     }

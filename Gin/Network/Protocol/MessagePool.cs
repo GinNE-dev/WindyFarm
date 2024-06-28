@@ -39,6 +39,8 @@ namespace WindyFarm.Gin.Network.Protocol
             Register(new InventoryTransactionMessage());
             Register(new FarmlandRequestMessage());
             Register(new FarmlandResponseMessage());
+            Register(new FarmlandTransactionMessage());
+            Register(new FarmlandTransactionResultMessage());
         }
 
         public bool Register(Message? message)
@@ -69,7 +71,6 @@ namespace WindyFarm.Gin.Network.Protocol
                 return null;
             }
 
-            message = message.Clone();
             message.Decode(json);
             return message;
         }

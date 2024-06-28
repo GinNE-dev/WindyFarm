@@ -31,5 +31,17 @@ namespace WindyFarm.Gin.Game.Items
         public virtual string Detail() => Description;
 
         public object Clone() => MemberwiseClone();
+
+        public bool HasSameData(Item item)
+        {
+            if(item is null) return false;
+            return this.Quality.Equals(item.Quality);
+        }
+
+        public bool Equals(Item other)
+        {
+            if(other is null) return false;
+            return this.Id.Equals(other.Id) && this.HasSameData(other);
+        }
     }
 }

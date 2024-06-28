@@ -27,5 +27,7 @@ namespace WindyFarm.Gin.Network.Protocol
         public virtual bool handleInventoryTransaction(InventoryTransactionMessage message) => false;
         public virtual bool handleFarmlandRequest(FarmlandRequestMessage message) => false;
         public virtual bool handleFarmlandResponse(FarmlandResponseMessage message) => false;
+        public virtual bool handleFarmlandTransaction(FarmlandTransactionMessage message) => false;
+        public virtual bool handleFarmlandTransactionResult(FarmlandTransactionResultMessage message) => false;
     }
 }

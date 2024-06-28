@@ -17,7 +17,7 @@ public partial class FarmlandDat
 
     public int CropQuality { get; set; }
 
-    public DateTime HarvestAt { get; set; }
+    public DateTime PlantedAt { get; set; }
 
     public virtual PlayerDat Owner { get; set; } = null!;
 }
