@@ -18,7 +18,8 @@
         PlayerMovement,
         InventoryDataRequest,
         InventoryTransaction,
-
+        FarmlandDataRequest,
+        FarmlandTransaction,
         ///S <summary>
         /// S
         KeySend,
@@ -28,7 +29,9 @@
         RegisterResult,
         CreateCharacterResult,
         PlayerDataResponse,
-        InventoryDataResponse
+        InventoryDataResponse,
+        FarmlandDataResponse,
+        FarmlandTransactionResult
     }
 }
 

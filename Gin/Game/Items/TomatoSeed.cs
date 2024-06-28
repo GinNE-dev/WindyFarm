@@ -13,8 +13,8 @@ namespace WindyFarm.Gin.Game.Items
 
         public sealed override string Description => "Plant to grow tomato";
 
-        public sealed override List<int> StageGrowingTimes => new() { 5, 5, 5 };
+        public sealed override List<int> StageGrowingTimes => new() { 10, 10, 10, 10, 10 };
 
-        public sealed override Item HavestProduct => ItemReplicator.Get(ItemId.TOMATO);
+        public sealed override Item HarvestProduct => ItemReplicator.Get(ItemId.TOMATO);
     }
 }

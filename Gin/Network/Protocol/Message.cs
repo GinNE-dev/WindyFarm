@@ -20,7 +20,7 @@ namespace WindyFarm.Gin.Network.Protocol
             }
         }
 
-        public string Endcode()
+        public string Encode()
         {
             try
             {
