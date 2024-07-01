@@ -125,7 +125,7 @@ namespace WindyFarm.Gin.Game.Players
             => Slots.FirstOrDefault(s=>s.Value.Item.Id.Equals(itemId) && s.Value.Item.DataId.Equals(dataId)).Value.Item;
 
         private object slotSafe = new();
-        public Item? TryTakeItem(int itemId, Guid dataId, int qty)
+        public Item TryTakeItem(int itemId, Guid dataId, int qty)
         {
             lock (slotSafe)
             {
@@ -134,15 +134,24 @@ namespace WindyFarm.Gin.Game.Players
                     && s.Value.Item.DataId.Equals(dataId))
                     .Value;
 
-                if (slot is null) return null;
+                if (slot is null) return ItemReplicator.Get(ItemId.VOID_ITEM);
                 return slot.Take(qty);
             }
         }
 
-        public Item? TryTakeOne(int itemId, Guid dataId)
+        public Item TryTakeOneAt(int slotIndex) => TryTakeItemAt(slotIndex, 1);
+        public Item TryTakeItemAt(int slotIndex, int qty)
         {
-            return TryTakeItem(itemId, dataId, 1);
+            lock (slotSafe)
+            {
+                var slot = Slots.Values.FirstOrDefault(s => s.Index.Equals(slotIndex));
+                if (slot is null) return ItemReplicator.Get(ItemId.VOID_ITEM);
+
+                return slot.Take(qty);
+            }
         }
+
+        public Item TryTakeOne(int itemId, Guid dataId) => TryTakeItem(itemId, dataId, 1);
 
         public bool IsAvailableFor(Item item, int qty)
         {
@@ -187,7 +196,7 @@ namespace WindyFarm.Gin.Game.Players
                     foreach (var slot in emtySlots)
                     {
                         if (remaining <= 0) return true;
-                        var putAvl = Math.Min(MAX_STACK_COUNT, qty);
+                        var putAvl = Math.Min(MAX_STACK_COUNT, remaining);
                         slot.PutItem(item, putAvl);
                         remaining -= putAvl;
                     }

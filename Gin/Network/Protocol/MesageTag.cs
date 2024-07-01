@@ -20,6 +20,8 @@
         InventoryTransaction,
         FarmlandDataRequest,
         FarmlandTransaction,
+        FarmingShopRequest,
+        FarmingShopTransaction,
         ///S <summary>
         /// S
         KeySend,
@@ -31,7 +33,8 @@
         PlayerDataResponse,
         InventoryDataResponse,
         FarmlandDataResponse,
-        FarmlandTransactionResult
+        FarmlandTransactionResult,
+        FarmingShopData
     }
 }
 
