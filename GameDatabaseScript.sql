@@ -53,13 +53,13 @@ CREATE TABLE ItemDat
 (
 	Id UNIQUEIDENTIFIER PRIMARY KEY,
 	ItemType INT NOT NULL,
-	Quality INT NOT NULL CHECK (Quality >= 0 AND Quality < 5)
+	Quality INT CHECK (Quality > 0 AND Quality <= 5) DEFAULT(1) NOT NULL,
 );
 
 INSERT INTO ItemDat(Id, ItemType, Quality) 
 VALUES
 --('00000000-0000-0000-0000-000000000000', 0, 1),
-('beb5642a-cfd3-462f-9633-24862e97a691', 1, 0),
+('beb5642a-cfd3-462f-9633-24862e97a691', 1, 1),
 ('beb5642a-cfd3-462f-9633-24862e97a692', 2, 2),
 ('beb5642a-cfd3-462f-9633-24862e97a693', 3, 4),
 ('beb5642a-cfd3-462f-9633-24862e97a694', 4, 3),
@@ -69,10 +69,10 @@ VALUES
 ('beb5642a-cfd3-462f-9633-24862e97a698', 8, 3),
 ('beb5642a-cfd3-462f-9633-24862e97a699', 9, 2),
 ('beb5642a-cfd3-462f-9633-24862e97a69a', 10, 2),
-('beb5642a-cfd3-462f-9633-24862e97a69b', 11, 0),
+('beb5642a-cfd3-462f-9633-24862e97a69b', 11, 1),
 ('beb5642a-cfd3-462f-9633-24862e97a69c', 12, 3),
 ('beb5642a-cfd3-462f-9633-24862e97a69d', 13, 2),
-('beb5642a-cfd3-462f-9633-24862e97a69e', 14, 0),
+('beb5642a-cfd3-462f-9633-24862e97a69e', 14, 1),
 ('beb5642a-cfd3-462f-9633-24862e97a69f', 15, 4),
 ('beb5642a-cfd3-462f-9633-24862e97a201', 201, 4);
 --SELECT * FROM ItemDat WHERE Id = '304913B9-BC83-41AF-8754-4CD1E018F3BE'
@@ -115,7 +115,7 @@ CREATE TABLE FarmlandDat (
 	Fertilized BIT DEFAULT(0)  NOT NULL,
 	CropQualityRiseChange INT CHECK(CropQualityRiseChange>=0) DEFAULT(0) NOT NULL,
     Seed INT CHECK (Seed >= 0) DEFAULT(0) NOT NULL,
-    CropQuality INT CHECK (CropQuality >= 0 AND CropQuality <= 5) DEFAULT(0) NOT NULL,
+    CropQuality INT CHECK (CropQuality > 0 AND CropQuality <= 5) DEFAULT(1) NOT NULL,
     PlantedAt DATETIME DEFAULT DATEADD(YEAR, 100, GETDATE()) NOT NULL,
     PRIMARY KEY (OwnerId, PlotIndex),
     FOREIGN KEY (OwnerId) REFERENCES PlayerDat(Id)

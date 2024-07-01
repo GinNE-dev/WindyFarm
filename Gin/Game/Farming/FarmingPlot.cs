@@ -66,7 +66,7 @@ namespace WindyFarm.Gin.Game.Farming
         {
             PlotData.PlotState = "Messed";
             PlotData.Seed = 0;
-            PlotData.CropQuality = 0;
+            PlotData.CropQuality = 1;
             PlotData.CropQualityRiseChange = 0;
             PlotData.Fertilized = false;
         }

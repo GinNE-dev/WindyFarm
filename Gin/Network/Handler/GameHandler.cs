@@ -165,8 +165,9 @@ namespace WindyFarm.Gin.Network.Handler
                     _player.SendInventory();
 
                     var sellPrice = shop.GetSellPrice(sellItem.Id);
-                    _player.GiveMoney(sellPrice * message.Quantity);
-                    GinLogger.Info($"Player[{_player.DisplayName}] was given {sellPrice * message.Quantity} coins after sell [{sellItem.Id}:{sellItem.Name}]x{message.Quantity}");
+                    int receiveMoney = (int) Math.Floor(ShopBalancer.PriceFactorByQuality(sellItem.Quality) * sellPrice * message.Quantity);
+                    _player.GiveMoney(receiveMoney);
+                    GinLogger.Info($"Player[{_player.DisplayName}] was given {receiveMoney} coins after sell Item[Id={sellItem.Id},{sellItem.Name}:Quality={sellItem.Quality}]x{message.Quantity}");
                     _player.SendStats();
 
                     shopDataMessage = shop.PrepareShopDataMessage();

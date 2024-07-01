@@ -64,7 +64,7 @@ namespace WindyFarm.Gin.Game.Players
             var emptyData = _dbContext.ItemDats.FirstOrDefault(x => x.Id.Equals(Guid.Empty) && x.ItemType.Equals(ItemId.VOID_ITEM));
             if(emptyData is null)
             {
-                emptyData = new ItemDat() { Id = Guid.Empty, ItemType = ItemId.VOID_ITEM };
+                emptyData = new ItemDat() { Id = Guid.Empty, ItemType = ItemId.VOID_ITEM, Quality = 1 };
                 _dbContext.ItemDats.Add(emptyData);
                 _dbContext.SaveChanges();
             }
