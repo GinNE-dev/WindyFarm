@@ -13,11 +13,15 @@ public partial class WindyFarmDatabaseContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
+    public virtual DbSet<FarmShop> FarmShops { get; set; }
+
     public virtual DbSet<FarmlandDat> FarmlandDats { get; set; }
 
     public virtual DbSet<InventorySlotDat> InventorySlotDats { get; set; }
 
     public virtual DbSet<ItemDat> ItemDats { get; set; }
+
+    public virtual DbSet<ItemSellPrice> ItemSellPrices { get; set; }
 
     public virtual DbSet<PlayerDat> PlayerDats { get; set; }
 
@@ -25,7 +29,7 @@ public partial class WindyFarmDatabaseContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Email).HasName("PK__Account__A9D10535F1DA9F1A");
+            entity.HasKey(e => e.Email).HasName("PK__Account__A9D105359FD1A1BD");
 
             entity.ToTable("Account");
 
@@ -33,9 +37,18 @@ public partial class WindyFarmDatabaseContext : DbContext
             entity.Property(e => e.HashedPassword).HasMaxLength(255);
         });
 
+        modelBuilder.Entity<FarmShop>(entity =>
+        {
+            entity.HasKey(e => e.SlotIndex).HasName("PK__FarmShop__909A97CABA326528");
+
+            entity.ToTable("FarmShop");
+
+            entity.Property(e => e.SlotIndex).ValueGeneratedNever();
+        });
+
         modelBuilder.Entity<FarmlandDat>(entity =>
         {
-            entity.HasKey(e => new { e.OwnerId, e.PlotIndex }).HasName("PK__Farmland__19DA69EB901B43C8");
+            entity.HasKey(e => new { e.OwnerId, e.PlotIndex }).HasName("PK__Farmland__19DA69EB13602BB2");
 
             entity.ToTable("FarmlandDat");
 
@@ -50,12 +63,12 @@ public partial class WindyFarmDatabaseContext : DbContext
             entity.HasOne(d => d.Owner).WithMany(p => p.FarmlandDats)
                 .HasForeignKey(d => d.OwnerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__FarmlandD__Owner__0B91BA14");
+                .HasConstraintName("FK__FarmlandD__Owner__6EF57B66");
         });
 
         modelBuilder.Entity<InventorySlotDat>(entity =>
         {
-            entity.HasKey(e => new { e.PlayerId, e.Slot }).HasName("PK__Inventor__3189CE5C9CCFE81D");
+            entity.HasKey(e => new { e.PlayerId, e.Slot }).HasName("PK__Inventor__3189CE5C2B22EEA6");
 
             entity.ToTable("InventorySlotDat");
 
@@ -71,20 +84,27 @@ public partial class WindyFarmDatabaseContext : DbContext
 
         modelBuilder.Entity<ItemDat>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ItemDat__3214EC07A4D9352F");
+            entity.HasKey(e => e.Id).HasName("PK__ItemDat__3214EC07CFD1D1D9");
 
             entity.ToTable("ItemDat");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
         });
 
+        modelBuilder.Entity<ItemSellPrice>(entity =>
+        {
+            entity.HasKey(e => e.ItemId).HasName("PK__ItemSell__727E838B625042EA");
+
+            entity.Property(e => e.ItemId).ValueGeneratedNever();
+        });
+
         modelBuilder.Entity<PlayerDat>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PlayerDa__3214EC0792D38331");
+            entity.HasKey(e => e.Id).HasName("PK__PlayerDa__3214EC07048A2A7C");
 
             entity.ToTable("PlayerDat");
 
-            entity.HasIndex(e => e.AccountId, "UQ__PlayerDa__349DA5A7A6F4CB42").IsUnique();
+            entity.HasIndex(e => e.AccountId, "UQ__PlayerDa__349DA5A74DA6D3E7").IsUnique();
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.AccountId).HasMaxLength(255);

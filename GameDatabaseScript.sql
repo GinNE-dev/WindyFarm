@@ -123,3 +123,34 @@ CREATE TABLE FarmlandDat (
 --DROP TABLE FarmlandDat
 --SELECT * FROM FarmlandDat
 --DELETE FROM FarmlandDat
+
+
+CREATE TABLE ItemSellPrices
+(
+	ItemId INT PRIMARY KEY,
+	BasePrice INT NOT NULL CHECK(BasePrice >= 0) DEFAULT(0)
+)
+
+INSERT INTO ItemSellPrices (ItemId, BasePrice) VALUES
+(1, 800), (2, 1600), (3, 2400), (4, 3200), (5, 4000), 
+(6, 4800), (7, 5600), (8, 6400), (9, 7200), (10, 8000),
+(11, 8800), (12, 9600), (13, 10400), (14, 11200), (15, 12000),
+(101, 1200), (102, 2300), (103, 3400), (104, 4500), (105, 5600), 
+(106, 6700), (107, 7800), (108, 8900), (109, 10000), (110, 110000),
+(111, 12000), (112, 13000), (113, 14000), (114, 15000), (115, 16000);
+
+--SELECT * FROM ItemSellPrices
+--DELETE FROM ItemSellPrices
+
+CREATE TABLE FarmShop
+(
+	SlotIndex INT PRIMARY KEY CHECK(SlotIndex>=0),
+	ItemId INT CHECK(ItemId>0) NOT NULL,
+	BuyPrice INT CHECK(BuyPrice>=0) NOT NULL
+)
+--SELECT * FROM FarmShop
+
+INSERT INTO FarmShop (SlotIndex, ItemId, BuyPrice) VALUES
+(0, 1, 1000), (1, 2, 2000), (2, 3, 3000), (3, 4, 4000), (4, 5, 5000), 
+(5, 6, 6000), (6, 7, 7000), (7, 8, 8000), (8, 9, 9000), (9, 10, 10000),
+(10, 11, 11000), (11, 12, 12000), (12, 13, 13000), (13, 14, 14000), (14, 15, 15000);

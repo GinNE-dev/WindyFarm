@@ -3,6 +3,7 @@ using System.Net;
 using WindyFarm.Gin.Core;
 using WindyFarm.Gin.Data;
 using WindyFarm.Gin.Game.Items;
+using WindyFarm.Gin.Game.Shop;
 using WindyFarm.Gin.Network;
 using WindyFarm.Gin.Network.Protocol;
 using WindyFarm.Gin.SystemLog;
@@ -19,6 +20,7 @@ namespace WindyFarm.Gin
             DbContext = dbContext;
             Instance = this;
             ItemReplicator.Init();
+            ShopManager.Instance.Init(dbContext);
         }
 
 
