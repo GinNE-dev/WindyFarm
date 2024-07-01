@@ -47,7 +47,7 @@ CREATE TABLE PlayerDat (
 --DELETE FROM [DBO].PlayerDat
 INSERT INTO Account (Email, HashedPassword) VALUES('gin2002fsh@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918')
 INSERT INTO PlayerDat (Id, DisplayName, Diamond, Gold, Level, Exp, Gender, PositionX, PositionY, PositionZ, MapId, AccountId) 
-VALUES('beb5642a-cfd3-462f-9633-24862e97a692', 'Gin', 99, 123000, 1, 0, 'Male', 57, 0, 30, 0, 'gin2002fsh@gmail.com')
+VALUES('beb5642a-cfd3-462f-9633-24862e97a692', 'Gin', 99, 5000, 1, 0, 'Male', 57, 0, 30, 0, 'gin2002fsh@gmail.com')
 
 CREATE TABLE ItemDat
 (
@@ -59,7 +59,7 @@ CREATE TABLE ItemDat
 INSERT INTO ItemDat(Id, ItemType, Quality) 
 VALUES
 --('00000000-0000-0000-0000-000000000000', 0, 1),
-('beb5642a-cfd3-462f-9633-24862e97a691', 1, 2),
+('beb5642a-cfd3-462f-9633-24862e97a691', 1, 0),
 ('beb5642a-cfd3-462f-9633-24862e97a692', 2, 2),
 ('beb5642a-cfd3-462f-9633-24862e97a693', 3, 4),
 ('beb5642a-cfd3-462f-9633-24862e97a694', 4, 3),
@@ -73,7 +73,8 @@ VALUES
 ('beb5642a-cfd3-462f-9633-24862e97a69c', 12, 3),
 ('beb5642a-cfd3-462f-9633-24862e97a69d', 13, 2),
 ('beb5642a-cfd3-462f-9633-24862e97a69e', 14, 0),
-('beb5642a-cfd3-462f-9633-24862e97a69f', 15, 4);
+('beb5642a-cfd3-462f-9633-24862e97a69f', 15, 4),
+('beb5642a-cfd3-462f-9633-24862e97a201', 201, 4);
 --SELECT * FROM ItemDat WHERE Id = '304913B9-BC83-41AF-8754-4CD1E018F3BE'
 --DELETE FROM ItemDat
 CREATE TABLE InventorySlotDat (
@@ -88,21 +89,22 @@ CREATE TABLE InventorySlotDat (
 
 INSERT INTO InventorySlotDat(PlayerId, Slot, ItemDatId, StackCount)
 VALUES
-('beb5642a-cfd3-462f-9633-24862e97a692', 1, 'beb5642a-cfd3-462f-9633-24862e97a691', 111),
-('beb5642a-cfd3-462f-9633-24862e97a692', 2, 'beb5642a-cfd3-462f-9633-24862e97a692', 555),
-('beb5642a-cfd3-462f-9633-24862e97a692', 3, 'beb5642a-cfd3-462f-9633-24862e97a693', 999),
-('beb5642a-cfd3-462f-9633-24862e97a692', 4, 'beb5642a-cfd3-462f-9633-24862e97a694', 976),
-('beb5642a-cfd3-462f-9633-24862e97a692', 5, 'beb5642a-cfd3-462f-9633-24862e97a695', 245),
-('beb5642a-cfd3-462f-9633-24862e97a692', 6, 'beb5642a-cfd3-462f-9633-24862e97a696', 111),
-('beb5642a-cfd3-462f-9633-24862e97a692', 7, 'beb5642a-cfd3-462f-9633-24862e97a697', 999),
-('beb5642a-cfd3-462f-9633-24862e97a692', 8, 'beb5642a-cfd3-462f-9633-24862e97a698', 976),
-('beb5642a-cfd3-462f-9633-24862e97a692', 9, 'beb5642a-cfd3-462f-9633-24862e97a699', 245),
-('beb5642a-cfd3-462f-9633-24862e97a692', 10, 'beb5642a-cfd3-462f-9633-24862e97a69a', 111),
-('beb5642a-cfd3-462f-9633-24862e97a692', 11, 'beb5642a-cfd3-462f-9633-24862e97a69b', 999),
-('beb5642a-cfd3-462f-9633-24862e97a692', 12, 'beb5642a-cfd3-462f-9633-24862e97a69c', 976),
-('beb5642a-cfd3-462f-9633-24862e97a692', 13, 'beb5642a-cfd3-462f-9633-24862e97a69d', 245),
-('beb5642a-cfd3-462f-9633-24862e97a692', 14, 'beb5642a-cfd3-462f-9633-24862e97a69e', 976),
-('beb5642a-cfd3-462f-9633-24862e97a692', 15, 'beb5642a-cfd3-462f-9633-24862e97a69f', 245);
+('beb5642a-cfd3-462f-9633-24862e97a692', 1, 'beb5642a-cfd3-462f-9633-24862e97a691', 10);
+--('beb5642a-cfd3-462f-9633-24862e97a692', 2, 'beb5642a-cfd3-462f-9633-24862e97a692', 555),
+--('beb5642a-cfd3-462f-9633-24862e97a692', 3, 'beb5642a-cfd3-462f-9633-24862e97a693', 999),
+---('beb5642a-cfd3-462f-9633-24862e97a692', 4, 'beb5642a-cfd3-462f-9633-24862e97a694', 976),
+----('beb5642a-cfd3-462f-9633-24862e97a692', 5, 'beb5642a-cfd3-462f-9633-24862e97a695', 245),
+--('beb5642a-cfd3-462f-9633-24862e97a692', 6, 'beb5642a-cfd3-462f-9633-24862e97a696', 111),
+--('beb5642a-cfd3-462f-9633-24862e97a692', 7, 'beb5642a-cfd3-462f-9633-24862e97a697', 999),
+--('beb5642a-cfd3-462f-9633-24862e97a692', 8, 'beb5642a-cfd3-462f-9633-24862e97a698', 976),
+--('beb5642a-cfd3-462f-9633-24862e97a692', 9, 'beb5642a-cfd3-462f-9633-24862e97a699', 245),
+--('beb5642a-cfd3-462f-9633-24862e97a692', 10, 'beb5642a-cfd3-462f-9633-24862e97a69a', 111),
+--('beb5642a-cfd3-462f-9633-24862e97a692', 11, 'beb5642a-cfd3-462f-9633-24862e97a69b', 999),
+--('beb5642a-cfd3-462f-9633-24862e97a692', 12, 'beb5642a-cfd3-462f-9633-24862e97a69c', 976),
+--('beb5642a-cfd3-462f-9633-24862e97a692', 13, 'beb5642a-cfd3-462f-9633-24862e97a69d', 245),
+--('beb5642a-cfd3-462f-9633-24862e97a692', 14, 'beb5642a-cfd3-462f-9633-24862e97a69e', 976),
+--('beb5642a-cfd3-462f-9633-24862e97a692', 15, 'beb5642a-cfd3-462f-9633-24862e97a69f', 245),
+--('beb5642a-cfd3-462f-9633-24862e97a692', 16, 'beb5642a-cfd3-462f-9633-24862e97a201', 201);
 --SELECT * FROM InventorySlotDat
 --DELETE FROM InventorySlotDat
 
@@ -111,6 +113,7 @@ CREATE TABLE FarmlandDat (
     PlotIndex INT CHECK (PlotIndex >= 0),
     PlotState VARCHAR(10) CHECK (PlotState IN ('Wild', 'Buyable','Messed', 'Tilled', 'Planted')) DEFAULT('Wild') NOT NULL,
 	Fertilized BIT DEFAULT(0)  NOT NULL,
+	CropQualityRiseChange INT CHECK(CropQualityRiseChange>=0) DEFAULT(0) NOT NULL,
     Seed INT CHECK (Seed >= 0) DEFAULT(0) NOT NULL,
     CropQuality INT CHECK (CropQuality >= 0 AND CropQuality <= 5) DEFAULT(0) NOT NULL,
     PlantedAt DATETIME DEFAULT DATEADD(YEAR, 100, GETDATE()) NOT NULL,
@@ -132,12 +135,13 @@ CREATE TABLE ItemSellPrices
 )
 
 INSERT INTO ItemSellPrices (ItemId, BasePrice) VALUES
-(1, 800), (2, 1600), (3, 2400), (4, 3200), (5, 4000), 
-(6, 4800), (7, 5600), (8, 6400), (9, 7200), (10, 8000),
-(11, 8800), (12, 9600), (13, 10400), (14, 11200), (15, 12000),
-(101, 1200), (102, 2300), (103, 3400), (104, 4500), (105, 5600), 
-(106, 6700), (107, 7800), (108, 8900), (109, 10000), (110, 110000),
-(111, 12000), (112, 13000), (113, 14000), (114, 15000), (115, 16000);
+(1, 100), (2, 160), (3, 240), (4, 320), (5, 400), 
+(6, 480), (7, 560), (8, 640), (9, 720), (10, 800),
+(11, 880), (12, 960), (13, 1040), (14, 1120), (15, 1200),
+(101, 180), (102, 300), (103, 450), (104, 600), (105, 700), 
+(106, 900), (107, 1100), (108, 1500), (109, 2000), (110, 2100),
+(111, 2200), (112, 2300), (113, 2600), (114, 2800), (115, 3000),
+(201, 80);
 
 --SELECT * FROM ItemSellPrices
 --DELETE FROM ItemSellPrices
@@ -149,8 +153,9 @@ CREATE TABLE FarmShop
 	BuyPrice INT CHECK(BuyPrice>=0) NOT NULL
 )
 --SELECT * FROM FarmShop
-
+--DELETE FROM FarmShop
 INSERT INTO FarmShop (SlotIndex, ItemId, BuyPrice) VALUES
-(0, 1, 1000), (1, 2, 2000), (2, 3, 3000), (3, 4, 4000), (4, 5, 5000), 
-(5, 6, 6000), (6, 7, 7000), (7, 8, 8000), (8, 9, 9000), (9, 10, 10000),
-(10, 11, 11000), (11, 12, 12000), (12, 13, 13000), (13, 14, 14000), (14, 15, 15000);
+(0, 1, 150), (1, 2, 200), (2, 3, 300), (3, 4, 400), (4, 5, 500), 
+(5, 6, 600), (6, 7, 700), (7, 8, 800), (8, 9, 900), (9, 10, 1000),
+(10, 11, 1100), (11, 12, 1200), (12, 13, 1300), (13, 14, 1400), (14, 15, 1500),
+(15, 201, 100);

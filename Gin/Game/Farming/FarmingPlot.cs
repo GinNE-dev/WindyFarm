@@ -17,6 +17,7 @@ namespace WindyFarm.Gin.Game.Farming
         public int PlotIndex => PlotData.PlotIndex;
         public int Seed => PlotData.Seed;
         public bool Fertilized => PlotData.Fertilized;
+        public int CropQualityRiseChange => PlotData.CropQualityRiseChange;
         public int CropQuality => PlotData.CropQuality;
         public string PlotState => PlotData.PlotState;
         public DateTime PlantedAt => PlotData.PlantedAt;
@@ -66,9 +67,24 @@ namespace WindyFarm.Gin.Game.Farming
             PlotData.PlotState = "Messed";
             PlotData.Seed = 0;
             PlotData.CropQuality = 0;
+            PlotData.CropQualityRiseChange = 0;
             PlotData.Fertilized = false;
         }
 
+        public bool AllowFertilize()
+        {
+            if (!PlotState.ToLower().Equals("planted")) return false;
+            if(!Fertilized) return false;
+
+            return true;
+        }
+
+        public void Fertilize(Fertilizer fertilizer)
+        {
+            if(!AllowFertilize()) return;
+            PlotData.CropQualityRiseChange = fertilizer.QualityRiseChange;
+            PlotData.Fertilized = true;
+        }
 
         public Item GetHarvestProduct()
         {
@@ -87,7 +103,8 @@ namespace WindyFarm.Gin.Game.Farming
 
             var product = seed.HarvestProduct;
 
-            var productData = new ItemDat() { Id = Guid.NewGuid(), ItemType = product.Id, Quality = CropQuality };
+            var productQuality = FarmBalancer.CalProductQuality(CropQuality, CropQualityRiseChange);
+            var productData = new ItemDat() { Id = Guid.NewGuid(), ItemType = product.Id, Quality = productQuality };
             product.AssignMetaData(productData);
 
             return product;

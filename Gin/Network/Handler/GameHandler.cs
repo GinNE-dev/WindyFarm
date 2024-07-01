@@ -100,8 +100,11 @@ namespace WindyFarm.Gin.Network.Handler
                 case FarmlandAction.Harvest:
                     farm.Harvest(message.PlotIndex);
                     break;
+                case FarmlandAction.Fertilize:
+                    farm.Fertilize(message.PlotIndex, message.UsedItemId, message.MetaDataId);
+                    break;
                 case FarmlandAction.Plant:
-                    farm.SeedPlot(message.PlotIndex, message.Seed, message.SeedDataId);
+                    farm.SeedPlot(message.PlotIndex, message.UsedItemId, message.MetaDataId);
                     break;
                 case FarmlandAction.Buy:
                     farm.BuyPlot(message.PlotIndex);

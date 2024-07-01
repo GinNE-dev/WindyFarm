@@ -12,8 +12,8 @@ namespace WindyFarm.Gin.Network.Protocol.Game
         public override MessageTag Tag => MessageTag.FarmlandTransaction;
         public int PlotIndex { get; set; }
         public FarmlandAction Action { get; set; } = FarmlandAction.Till;
-        public int Seed {  get; set; }
-        public Guid SeedDataId { get; set; } = Guid.Empty;
+        public int UsedItemId {  get; set; }
+        public Guid MetaDataId { get; set; } = Guid.Empty;
 
         public override bool Execute(IMessageHandler handler)
         {
@@ -27,8 +27,8 @@ namespace WindyFarm.Gin.Network.Protocol.Game
             {
                 PlotIndex = m.PlotIndex;
                 Action = m.Action;
-                Seed = m.Seed;
-                SeedDataId = m.SeedDataId;
+                UsedItemId = m.UsedItemId;
+                MetaDataId = m.MetaDataId;
             }
         }
     }
@@ -38,6 +38,7 @@ namespace WindyFarm.Gin.Network.Protocol.Game
         Buy,
         Till,
         Plant,
+        Fertilize,
         Harvest
     }
 }

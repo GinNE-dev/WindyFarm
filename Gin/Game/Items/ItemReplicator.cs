@@ -45,6 +45,7 @@ namespace WindyFarm.Gin.Game.Items
             Register(new TurnipSeed());
             Register(new WaterMelon());
             Register(new WaterMelonSeed());
+            Register(new NormalFertilizer());
         }
 
         public static bool Register(Item item)
@@ -102,5 +103,7 @@ namespace WindyFarm.Gin.Game.Items
         public readonly static int STRAWBERRY = 113;
         public readonly static int TURNIP = 114;
         public readonly static int WATERMELON = 115;
+
+        public readonly static int NORMAL_FERTILIZER = 201;
     }
 }
