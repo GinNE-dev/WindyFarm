@@ -129,7 +129,7 @@ namespace WindyFarm.Gin.Game.Farming
             var maybeSeed = _owner.Inventory.TryTakeOne(itemSeedId, seedDataId);
             if (maybeSeed is not Seed || maybeSeed is null)
             {
-                GinLogger.Warning($"Someone tried to plant with item that is not Plant [id={itemSeedId}] !!!!");
+                GinLogger.Warning($"Someone tried to seed with Item[id={itemSeedId}] that is not Seed!!!!");
                 return;
             }
 
@@ -137,6 +137,26 @@ namespace WindyFarm.Gin.Game.Farming
             _owner.SendInventory();
 
             ResponseFarmlandTransaction(plotIdx, FarmlandAction.Plant, true, itemSeedId);
+        }
+
+        public void Fertilize(int plotIdx, int fertilizerId, Guid dataId)
+        {
+            if (plotIdx < 0 || plotIdx > FarmlandSize - 1) return;
+            Plots.TryGetValue(plotIdx, out var farmingPlot);
+
+            if (farmingPlot is null) return;
+            var maybeFertilizer = _owner.Inventory.TryTakeOne(fertilizerId, dataId);
+            _owner.SendInventory();
+
+            if (maybeFertilizer is null or not Fertilizer)
+            {
+                GinLogger.Warning($"Someone tried to fertilize with Item[id={fertilizerId}] item that is not Fertilizer!!!!");
+                return;
+            }
+
+            farmingPlot.Fertilize((Fertilizer) maybeFertilizer);
+
+            ResponseFarmlandTransaction(plotIdx, FarmlandAction.Fertilize, true);
         }
 
         public void Harvest(int plotIdx)

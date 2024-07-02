@@ -13,6 +13,8 @@ public partial class FarmlandDat
 
     public bool Fertilized { get; set; }
 
+    public int CropQualityRiseChange { get; set; }
+
     public int Seed { get; set; }
 
     public int CropQuality { get; set; }
