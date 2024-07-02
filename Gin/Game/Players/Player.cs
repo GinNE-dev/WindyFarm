@@ -24,6 +24,7 @@ namespace WindyFarm.Gin.Game.Players
         public int Gold => _playerData.Gold;
         public int Diamond => _playerData.Diamond;
         public int Level => _playerData.Level;
+        public int Energy => _playerData.Energy;
         public int Exp => _playerData.Exp;
         public string Gender => _playerData.Gender;
         public int MaxInventory => _playerData.MaxInventory;
@@ -38,6 +39,7 @@ namespace WindyFarm.Gin.Game.Players
         private readonly Session _session;
         private readonly WindyFarmDatabaseContext _dbContext;
         public readonly Farm FarmManager;
+
         public Player(WindyFarmDatabaseContext dbContext, Server server, Session session, PlayerDat playerData)
         {
             _dbContext = dbContext;
@@ -61,6 +63,8 @@ namespace WindyFarm.Gin.Game.Players
                 dataMsg.Diamond = this.Diamond;
                 dataMsg.Level = this.Level;
                 dataMsg.Exp = this.Exp;
+                dataMsg.Energy = this.Energy;
+                dataMsg.EnergyCapacity = this.EnergyCapacity;
                 dataMsg.LevelUpExp = this.LevelUpExp;
                 dataMsg.PositionX = this.PositionX;
                 dataMsg.PositionY = this.PositionY;
@@ -118,6 +122,34 @@ namespace WindyFarm.Gin.Game.Players
         }
 
         public int LevelUpExp => (int)Math.Round(86.95 * Math.Pow(1.15, Level));
+
+        public int EnergyCapacity => 48 + Level * 2;
+
+        private object energySafe = new();
+        public bool TryConsumeEnergy(int amount)
+        {
+            if(amount < 0) return false;
+            lock(energySafe)
+            {
+                if(Energy - amount < 0) return false;
+                _playerData.Energy -= amount;
+                return true;
+            }
+        }
+
+        public void ConsumeFood(Food food)
+        {
+            if(food is null) return;
+            GainEnergy(food.Energy);
+        }
+
+        public void GainEnergy(int amount)
+        {
+            lock (energySafe)
+            {
+                _playerData.Energy = Math.Min(Energy + amount, EnergyCapacity);
+            }
+        }
 
         public void GainExp(int amount)
         {

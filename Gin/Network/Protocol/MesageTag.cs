@@ -22,6 +22,7 @@
         FarmlandTransaction,
         FarmingShopRequest,
         FarmingShopTransaction,
+        ItemConsumption,
         ///S <summary>
         /// S
         KeySend,
