@@ -139,14 +139,14 @@ namespace WindyFarm.Gin.Game.Farming
             }
             _owner.SendStats();
 
-            var maybeSeed = _owner.Inventory.TryTakeOne(itemSeedId, seedDataId);
-            if (maybeSeed is not Seed || maybeSeed is null)
+            var seed = _owner.Inventory.TryTakeOne<Seed>(itemSeedId, seedDataId);
+            if (seed is null)
             {
                 GinLogger.Warning($"Someone tried to seed with Item[id={itemSeedId}] that is not Seed!!!!");
                 return;
             }
 
-            farmingPlot.Plant((Seed) maybeSeed);
+            farmingPlot.Plant(seed);
             _owner.SendInventory();
 
             ResponseFarmlandTransaction(plotIdx, FarmlandAction.Plant, true, itemSeedId);
@@ -158,29 +158,26 @@ namespace WindyFarm.Gin.Game.Farming
             Plots.TryGetValue(plotIdx, out var farmingPlot);
 
             if (farmingPlot is null) return;
-            var maybeFertilizer = _owner.Inventory.TryTakeOne(fertilizerId, dataId);
+            var fertilize = _owner.Inventory.TryTakeOne<Fertilizer>(fertilizerId, dataId);
             _owner.SendInventory();
 
-            if (maybeFertilizer is null or not Fertilizer)
+            if (fertilize is null)
             {
                 GinLogger.Warning($"Someone tried to fertilize with Item[id={fertilizerId}] item that is not Fertilizer!!!!");
                 return;
             }
 
-            farmingPlot.Fertilize((Fertilizer) maybeFertilizer);
+            farmingPlot.Fertilize(fertilize);
 
             ResponseFarmlandTransaction(plotIdx, FarmlandAction.Fertilize, true);
         }
 
         public void Harvest(int plotIdx)
         {
-            GinLogger.Print("H0");
             if (plotIdx < 0 || plotIdx > FarmlandSize - 1) return;
-            GinLogger.Print("H1");
             Plots.TryGetValue(plotIdx, out var farmingPlot);
 
             if (farmingPlot is null) return;
-            GinLogger.Print("H2");
 
             if (!_owner.TryConsumeEnergy(FarmBalancer.HarvestEnergyConsumtion))
             {
@@ -192,11 +189,9 @@ namespace WindyFarm.Gin.Game.Farming
 
             var product = farmingPlot.GetHarvestProduct();
             if (product is VoidItem) return;
-            GinLogger.Print("H3");
 
             if (_owner.Inventory.TryPutOne(product))
             {
-                GinLogger.Print("H7");
                 farmingPlot.ClearPlot();
                 _owner.SendInventory();
             }

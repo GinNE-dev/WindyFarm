@@ -90,16 +90,13 @@ namespace WindyFarm.Gin.Game.Farming
         {
             if (!PlotState.ToLower().Equals("planted"))
                 return ItemReplicator.Get(ItemId.VOID_ITEM);
-            GinLogger.Print("H31");
             var item = ItemReplicator.Get(this.Seed);
             if (item is null || item is not Items.Seed)
                 return ItemReplicator.Get(ItemId.VOID_ITEM);
-            GinLogger.Print("H32");
             var seed = (Seed)item;
 
             if (DateTime.Now < PlantedAt.AddSeconds(seed.StageGrowingTimes.Sum()))
                 return ItemReplicator.Get(ItemId.VOID_ITEM);
-            GinLogger.Print("H33");
 
             var product = seed.HarvestProduct;
 

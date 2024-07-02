@@ -125,7 +125,7 @@ namespace WindyFarm.Gin.Game.Players
             => Slots.FirstOrDefault(s=>s.Value.Item.Id.Equals(itemId) && s.Value.Item.DataId.Equals(dataId)).Value.Item;
 
         private object slotSafe = new();
-        public Item TryTakeItem(int itemId, Guid dataId, int qty)
+        public T? TryTakeItem<T>(int itemId, Guid dataId, int qty) where T : Item
         {
             lock (slotSafe)
             {
@@ -134,24 +134,31 @@ namespace WindyFarm.Gin.Game.Players
                     && s.Value.Item.DataId.Equals(dataId))
                     .Value;
 
-                if (slot is null) return ItemReplicator.Get(ItemId.VOID_ITEM);
-                return slot.Take(qty);
+                if (slot is null) return null;
+                return slot.Take<T>(qty);
             }
         }
 
-        public Item TryTakeOneAt(int slotIndex) => TryTakeItemAt(slotIndex, 1);
-        public Item TryTakeItemAt(int slotIndex, int qty)
+        public T? TryTakeOneAt<T>(int slotIndex) where T : Item
+        {
+            return TryTakeItemAt<T>(slotIndex, 1);
+        }
+
+        public T? TryTakeItemAt<T>(int slotIndex, int qty) where T : Item
         {
             lock (slotSafe)
             {
                 var slot = Slots.Values.FirstOrDefault(s => s.Index.Equals(slotIndex));
-                if (slot is null) return ItemReplicator.Get(ItemId.VOID_ITEM);
+                if (slot is null) return null;
 
-                return slot.Take(qty);
+                return slot.Take<T>(qty);
             }
         }
 
-        public Item TryTakeOne(int itemId, Guid dataId) => TryTakeItem(itemId, dataId, 1);
+        public T? TryTakeOne<T>(int itemId, Guid dataId) where T : Item
+        {
+            return TryTakeItem<T>(itemId, dataId, 1);
+        }
 
         public bool IsAvailableFor(Item item, int qty)
         {

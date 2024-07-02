@@ -159,7 +159,7 @@ namespace WindyFarm.Gin.Network.Handler
                     _player.SendMessageAsync(shopDataMessage);
                     break;
                 case FarmingShopTransaction.Sell:
-                    var sellItem = _player.Inventory.TryTakeItemAt(message.SlotIndex, message.Quantity);
+                    var sellItem = _player.Inventory.TryTakeItemAt<Item>(message.SlotIndex, message.Quantity);
                     if(sellItem is null || sellItem is VoidItem) return false;
                     GinLogger.Info($"Player[{_player.DisplayName}] was taken Item[{sellItem.Id}:{sellItem.Name}]x{message.Quantity}");
                     _player.SendInventory();
@@ -180,10 +180,10 @@ namespace WindyFarm.Gin.Network.Handler
 
         public override bool handleItemConnsumption(ItemConsumptionMessage message)
         {
-            var item = _player.Inventory.TryTakeOneAt(message.InvSlotIndex);
+            var item = _player.Inventory.TryTakeOneAt<Food>(message.InvSlotIndex);
             _player.SendInventory();
-            if(item is null or not Food) return false;
-            _player.ConsumeFood((Food) item);
+            if(item is null) return false;
+            _player.ConsumeFood(item);
             _player.SendStats();
             return true;
         }

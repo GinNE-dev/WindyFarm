@@ -60,30 +60,32 @@ namespace WindyFarm.Gin.Game.Players
 
         private object slotSafe = new object();
 
-        public Item TakeOne()
+        public T? TakeOne<T>() where T : Item
         {
-            return Take(1);
+            return Take<T>(1);
         }
 
-        public Item Take(int qty)
+        public T? Take<T>(int qty) where T : Item
         {
-            if(qty < 0) return ItemReplicator.Get(ItemId.VOID_ITEM);
+            if(qty < 0) return null;
 
             lock (slotSafe)
             {
+                if (Item is not T) return null;
+
                 if (SlotData.StackCount < qty)
                 {
-                    return ItemReplicator.Get(ItemId.VOID_ITEM); ;
+                    return null;
                 }
                 else if (SlotData.StackCount == qty)
                 {
                     var item = Item;
                     RemoveItem();
-                    return item;
+                    return (T) item;
                 }else
                 {
                     SlotData.StackCount -= qty;
-                    return Item;
+                    return (T) Item;
                 }
             }
         }
