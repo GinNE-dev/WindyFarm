@@ -31,7 +31,7 @@ CREATE TABLE PlayerDat (
     Diamond INT CHECK (Diamond >= 0) DEFAULT(0)  NOT NULL,
     Gold INT DEFAULT(0) CHECK (Gold >= 0) NOT NULL,
     Level INT  DEFAULT(1) CHECK (Level > 0) NOT NULL,
-	Energy INT CHECK(Energy>=0) DEFAULT(0) NOT NULL,
+	Energy INT CHECK(Energy>=0) DEFAULT(50) NOT NULL,
     Exp INT DEFAULT(0) CHECK (Exp >= 0) NOT NULL,
 	Gender NVARCHAR(50) NOT NULL,
     CONSTRAINT CHK_Gender CHECK (Gender IN ('Male', 'Female')),
@@ -127,6 +127,17 @@ CREATE TABLE FarmlandDat (
 --DROP TABLE FarmlandDat
 --SELECT * FROM FarmlandDat
 --DELETE FROM FarmlandDat
+
+CREATE TABLE CattleDat
+(
+	OwnerId UNIQUEIDENTIFIER,
+    SlotIndex INT CHECK (SlotIndex >= 0),
+	EggId INT DEFAULT(0) NOT NULL,
+	BornAt DATETIME DEFAULT DATEADD(YEAR, 100, GETDATE()) NOT NULL,
+	GiveProduceAt DATETIME DEFAULT DATEADD(YEAR, 100, GETDATE()) NOT NULL,
+	PRIMARY KEY (OwnerId, SlotIndex),
+	FOREIGN KEY (OwnerId) REFERENCES PlayerDat(Id)
+)
 
 
 CREATE TABLE ItemSellPrices

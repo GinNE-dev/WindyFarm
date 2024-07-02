@@ -118,6 +118,7 @@ namespace WindyFarm.Gin.Game.Farming
                 ResponseFarmlandTransaction(plotIdx, FarmlandAction.Plant, false);
                 return;
             }
+            _owner.GainExp(FarmBalancer.TillPlotExp);
             _owner.SendStats();
 
             farmingPlot.Till();
@@ -137,6 +138,7 @@ namespace WindyFarm.Gin.Game.Farming
                 ResponseFarmlandTransaction(plotIdx, FarmlandAction.Plant, false, itemSeedId);
                 return;
             }
+            _owner.GainExp(FarmBalancer.SeedPlatExp);
             _owner.SendStats();
 
             var seed = _owner.Inventory.TryTakeOne<Seed>(itemSeedId, seedDataId);
@@ -185,10 +187,10 @@ namespace WindyFarm.Gin.Game.Farming
                 return;
             }
 
-            _owner.SendStats();
-
             var product = farmingPlot.GetHarvestProduct();
             if (product is VoidItem) return;
+            _owner.GainExp(FarmBalancer.GetProductExp(product));
+            _owner.SendStats();
 
             if (_owner.Inventory.TryPutOne(product))
             {

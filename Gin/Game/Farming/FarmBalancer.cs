@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindyFarm.Gin.Game.Items;
 
 namespace WindyFarm.Gin.Game.Farming
 {
@@ -19,5 +20,35 @@ namespace WindyFarm.Gin.Game.Farming
         public static int TillPlotEnergyConsumtion => 2;
         public static int SeedPlantEnergyConsumtion => 1;
         public static int HarvestEnergyConsumtion => 1;
+
+        public static int TillPlotExp => 1;
+        public static int SeedPlatExp => 1;
+
+        public static int GetProductExp(Item item)
+        {
+            if(item is null) return 0;
+
+            return (int) Math.Floor(5 * ExpFactorByQuality(item.Quality));
+        }
+
+        public static double ExpFactorByQuality(int quality)
+        {
+            if (quality < 1) return 1;
+            switch (quality)
+            {
+                case 1:
+                    return 1;
+                case 2:
+                    return 1.1;
+                case 3:
+                    return 1.32;
+                case 4:
+                    return 1.716;
+                case 5:
+                    return 2.5;
+            }
+
+            return 2.5;
+        }
     }
 }
