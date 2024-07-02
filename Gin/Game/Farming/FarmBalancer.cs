@@ -15,5 +15,9 @@ namespace WindyFarm.Gin.Game.Farming
 
             return new Random().Next(100) < (1+ extraChange/100.0) * 50.0/(cropQuality+1) ? cropQuality + 1 : cropQuality;  
         }
+
+        public static int TillPlotEnergyConsumtion => 2;
+        public static int SeedPlantEnergyConsumtion => 1;
+        public static int HarvestEnergyConsumtion => 1;
     }
 }

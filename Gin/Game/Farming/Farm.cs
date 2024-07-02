@@ -113,6 +113,13 @@ namespace WindyFarm.Gin.Game.Farming
             Plots.TryGetValue(plotIdx, out var farmingPlot);
 
             if (farmingPlot is null) return;
+            if(!_owner.TryConsumeEnergy(FarmBalancer.TillPlotEnergyConsumtion))
+            {
+                ResponseFarmlandTransaction(plotIdx, FarmlandAction.Plant, false);
+                return;
+            }
+            _owner.SendStats();
+
             farmingPlot.Till();
 
             ResponseFarmlandTransaction(plotIdx, FarmlandAction.Till, true);
@@ -125,6 +132,12 @@ namespace WindyFarm.Gin.Game.Farming
 
             if (farmingPlot is null) return;
             if (!farmingPlot.IsAllowPlant()) return;
+            if (!_owner.TryConsumeEnergy(FarmBalancer.SeedPlantEnergyConsumtion))
+            {
+                ResponseFarmlandTransaction(plotIdx, FarmlandAction.Plant, false, itemSeedId);
+                return;
+            }
+            _owner.SendStats();
 
             var maybeSeed = _owner.Inventory.TryTakeOne(itemSeedId, seedDataId);
             if (maybeSeed is not Seed || maybeSeed is null)
@@ -168,6 +181,15 @@ namespace WindyFarm.Gin.Game.Farming
 
             if (farmingPlot is null) return;
             GinLogger.Print("H2");
+
+            if (!_owner.TryConsumeEnergy(FarmBalancer.HarvestEnergyConsumtion))
+            {
+                ResponseFarmlandTransaction(plotIdx, FarmlandAction.Harvest, false);
+                return;
+            }
+
+            _owner.SendStats();
+
             var product = farmingPlot.GetHarvestProduct();
             if (product is VoidItem) return;
             GinLogger.Print("H3");
@@ -178,6 +200,8 @@ namespace WindyFarm.Gin.Game.Farming
                 farmingPlot.ClearPlot();
                 _owner.SendInventory();
             }
+
+            ResponseFarmlandTransaction(plotIdx, FarmlandAction.Harvest, true);
         }
 
         private bool ResponseFarmlandTransaction(int plotIdx, FarmlandAction action, bool success, int plantedSeed = 0)

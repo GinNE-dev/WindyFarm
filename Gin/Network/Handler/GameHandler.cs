@@ -177,5 +177,15 @@ namespace WindyFarm.Gin.Network.Handler
             }
             return true;
         }
+
+        public override bool handleItemConnsumption(ItemConsumptionMessage message)
+        {
+            var item = _player.Inventory.TryTakeOneAt(message.InvSlotIndex);
+            _player.SendInventory();
+            if(item is null or not Food) return false;
+            _player.ConsumeFood((Food) item);
+            _player.SendStats();
+            return true;
+        }
     }
 }

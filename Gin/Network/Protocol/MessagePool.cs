@@ -44,6 +44,7 @@ namespace WindyFarm.Gin.Network.Protocol
             Register(new FarmingShopRequestMessage());
             Register(new FarmingShopDataMessage());
             Register(new FarmingShopTransactionMessage());
+            Register(new ItemConsumptionMessage());
         }
 
         public bool Register(Message? message)

@@ -15,6 +15,8 @@ public partial class PlayerDat
 
     public int Level { get; set; }
 
+    public int Energy { get; set; }
+
     public int Exp { get; set; }
 
     public string Gender { get; set; } = null!;

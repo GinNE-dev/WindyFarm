@@ -22,6 +22,11 @@ namespace WindyFarm.Gin.Network.Protocol.Game
         public int Level { get; set; } = 1;
 
         public int Exp { get; set; }
+
+        public int Energy { get; set; }
+
+        public int EnergyCapacity { get; set; }
+
         public int LevelUpExp { get; set; }
 
         public string Gender { get; set; } = "Male"!;
@@ -54,6 +59,8 @@ namespace WindyFarm.Gin.Network.Protocol.Game
                 Diamond = msg.Diamond;
                 Level = msg.Level;
                 Exp = msg.Exp;
+                Energy = msg.Energy;
+                EnergyCapacity = msg.EnergyCapacity;
                 LevelUpExp = msg.LevelUpExp;
                 Gender = msg.Gender;
                 MaxInventory = msg.MaxInventory;
