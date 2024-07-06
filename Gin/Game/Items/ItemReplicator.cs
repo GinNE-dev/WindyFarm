@@ -46,6 +46,17 @@ namespace WindyFarm.Gin.Game.Items
             Register(new WaterMelon());
             Register(new WaterMelonSeed());
             Register(new NormalFertilizer());
+            Register(new FertilizedChickenEgg());
+            Register(new ChickenEgg());
+            Register(new AnimalFoodPack());
+            Register(new DuckSpawner());
+            Register(new CowSpawner());
+            Register(new SheepSpawner());
+            Register(new PigSpawner());
+            Register(new DuckEgg());
+            Register(new Milk());
+            Register(new Wool());
+            Register(new Truffle());
         }
 
         public static bool Register(Item item)
@@ -105,5 +116,18 @@ namespace WindyFarm.Gin.Game.Items
         public readonly static int WATERMELON = 115;
 
         public readonly static int NORMAL_FERTILIZER = 201;
+        public readonly static int ANIMAL_FOOD_PACK = 202;
+
+        public readonly static int FERTILIZED_CHICKEN_EGG = 301;
+        public readonly static int DUCK_SPAWNER = 302;
+        public readonly static int COW_SPAWNER = 303;
+        public readonly static int SHEEP_SPAWNER = 304;
+        public readonly static int PIG_SPAWNER = 305;
+
+        public readonly static int CHICKEN_EGG = 401;
+        public readonly static int DUCK_EGG = 402;
+        public readonly static int COW_MILK_JAR = 403;
+        public readonly static int WOOL = 404;
+        public readonly static int TRUFFLE = 405;
     }
 }

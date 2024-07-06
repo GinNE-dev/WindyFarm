@@ -39,7 +39,7 @@ namespace WindyFarm.Gin.Game.Players
         private readonly Session _session;
         private readonly WindyFarmDatabaseContext _dbContext;
         public readonly Farm FarmManager;
-
+        public readonly Barn Barn;
         public Player(WindyFarmDatabaseContext dbContext, Server server, Session session, PlayerDat playerData)
         {
             _dbContext = dbContext;
@@ -49,6 +49,7 @@ namespace WindyFarm.Gin.Game.Players
 
             Inventory = new Inventory(this, _dbContext);
             FarmManager = new Farm(this, _dbContext);
+            Barn = new Barn(this, _dbContext);
         }
 
         public bool SendStats()
