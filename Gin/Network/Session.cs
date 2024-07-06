@@ -93,6 +93,11 @@ namespace WindyFarm.Gin.Network
             }
         }
 
+        public void StartHandleGame(Player player)
+        {
+            Handler = new GameHandler(_server, this, player);
+        }
+
         public void Login(string username, string password)
         {
             string hashedPassword = CryptographyHelper.ComputeSha256Hash(password);

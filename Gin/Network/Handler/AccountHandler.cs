@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WindyFarm.Gin.Data;
+using WindyFarm.Gin.Game.Players;
 using WindyFarm.Gin.Network.Protocol;
 using WindyFarm.Gin.Network.Protocol.Account;
 using WindyFarm.Gin.Network.Utils;
@@ -131,6 +132,10 @@ namespace WindyFarm.Gin.Network.Handler
 
             r.Result = CreateCharacterResult.Success;
             _session.SendMessageAsync(r);
+
+            var palyer = new Player(_dbContext, _server, _session, newPlayerData);
+            _session.StartHandleGame(palyer);
+
             return true;
         }
     }
