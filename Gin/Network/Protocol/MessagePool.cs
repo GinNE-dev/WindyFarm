@@ -31,6 +31,7 @@ namespace WindyFarm.Gin.Network.Protocol
             Register(new RegisterMessage());
             Register(new RegisterResultMessage());
             Register(new CreateCharacterMessage());
+            Register(new CreateCharacterResultMessage());
             Register(new RequestPlayerMessage());
             Register(new PlayerDataMessage());
             Register(new PlayerMovementMessage());
@@ -45,6 +46,11 @@ namespace WindyFarm.Gin.Network.Protocol
             Register(new FarmingShopDataMessage());
             Register(new FarmingShopTransactionMessage());
             Register(new ItemConsumptionMessage());
+            Register(new BarnDataRequestMessage()); 
+            Register(new BarnDataResponseMessage());
+            Register(new BarnTransactionMessage());
+            Register(new BarnSpawnAnimalMessage());
+            Register(new BarnTransactionResultMessage());
         }
 
         public bool Register(Message? message)

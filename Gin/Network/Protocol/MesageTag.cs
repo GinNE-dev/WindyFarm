@@ -23,6 +23,9 @@
         FarmingShopRequest,
         FarmingShopTransaction,
         ItemConsumption,
+        BarnRequest,
+        BarnTransaction,
+        SpawnBarnAnimal,
         ///S <summary>
         /// S
         KeySend,
@@ -35,7 +38,9 @@
         InventoryDataResponse,
         FarmlandDataResponse,
         FarmlandTransactionResult,
-        FarmingShopData
+        FarmingShopData,
+        BarnDataResponse,
+        BarnTransactionResult
     }
 }
 

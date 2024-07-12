@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -185,6 +186,29 @@ namespace WindyFarm.Gin.Network.Handler
             if(item is null) return false;
             _player.ConsumeFood(item);
             _player.SendStats();
+            return true;
+        }
+
+        public override bool handleBarnDataResquest(BarnDataRequestMessage message)
+        {
+            _player.Barn.SendBarnData();
+            return true;
+        }
+
+        public override bool handleBarnTransaction(BarnTransactionMessage message)
+        {
+            switch(message.Action)
+            {
+                case BarnAction.SpawnAnimal:
+                    _player.Barn.SpawnAnimal(message.UsedItemId, message.UsedItemDataId);
+                    break;
+                case BarnAction.Feed:
+                    _player.Barn.FeedAnimal(message.BarnSlotIdx, message.UsedItemId, message.UsedItemDataId);
+                    break;
+                case BarnAction.Harvest:
+                    _player.Barn.HarvestAnimal(message.BarnSlotIdx);
+                    break;
+            }
             return true;
         }
     }

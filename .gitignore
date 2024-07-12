@@ -11,6 +11,7 @@
 *.sln.docstates
 *.gininst
 GameDatabaseScript.sql
+*.sql
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 # Mono auto generated files

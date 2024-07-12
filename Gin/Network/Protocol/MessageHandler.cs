@@ -33,5 +33,10 @@ namespace WindyFarm.Gin.Network.Protocol
         public virtual bool handleFarmingShopResponse(FarmingShopDataMessage message) => false;
         public virtual bool handleFarmingShopTransaction(FarmingShopTransactionMessage message) => false;
         public virtual bool handleItemConnsumption(ItemConsumptionMessage message) => false;
+        public virtual bool handleBarnDataResquest(BarnDataRequestMessage message) => false;
+        public virtual bool handleBarnDataResponse(BarnDataResponseMessage message) => false;
+        public virtual bool handleBarnTransaction(BarnTransactionMessage message) => false;
+        public virtual bool handleBarnSpawnAnimal(BarnSpawnAnimalMessage message) => false;
+        public virtual bool handleBarnTransactionResult(BarnTransactionResultMessage message) => false;
     }
 }
