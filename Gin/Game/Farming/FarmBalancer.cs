@@ -20,6 +20,8 @@ namespace WindyFarm.Gin.Game.Farming
         public static int TillPlotEnergyConsumtion => 2;
         public static int SeedPlantEnergyConsumtion => 1;
         public static int HarvestEnergyConsumtion => 1;
+        public static int FeedAnimalEnergyConsumtion => 2;
+        public static int HarvestAnimalEnergyConsumtion => 2;
 
         public static int TillPlotExp => 1;
         public static int SeedPlatExp => 1;

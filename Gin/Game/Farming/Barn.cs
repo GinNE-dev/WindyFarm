@@ -52,13 +52,18 @@ namespace WindyFarm.Gin.Game.Farming
         {
             var slot = BarnSlots.Values.FirstOrDefault(s => s.SlotIndex.Equals(slotIdx));
             if (slot is null) return;
-            
+
+            if (!slot.AlowFeed()) return;
+
+            if (!_owner.TryConsumeEnergy(FarmBalancer.FeedAnimalEnergyConsumtion)) return;
+            _owner.SendStats();
+
             var food = _owner.Inventory.TryTakeOne<AnimalFood>(usedItemId, spawnerDataId);
-            _owner.SendInventory();
             if (food is null) return;
 
             slot.Feed();
 
+            _owner.SendInventory();
             SendTransactionResult(slotIdx, BarnAction.Feed, true, usedItemId);
         }
 
@@ -81,11 +86,17 @@ namespace WindyFarm.Gin.Game.Farming
             var slot = BarnSlots.Values.FirstOrDefault(s => s.SlotIndex.Equals(slotIdx));
             if (slot is null) return;
 
+            if (!_owner.TryConsumeEnergy(FarmBalancer.HarvestAnimalEnergyConsumtion)) return;
+
             var product = slot.GetHarvestProduct();
             if(product is VoidItem) return;
 
-            if(!_owner.Inventory.TryPutOne(product)) return;
+            _owner.GainExp(FarmBalancer.GetProductExp(product));
+            _owner.SendStats();
+
+            if (!_owner.Inventory.TryPutOne(product)) return;
             _owner.SendInventory();
+
             slot.Harvest();
 
             SendTransactionResult(slotIdx, BarnAction.Harvest, true);

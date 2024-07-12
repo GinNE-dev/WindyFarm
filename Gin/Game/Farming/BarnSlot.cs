@@ -60,17 +60,18 @@ namespace WindyFarm.Gin.Game.Farming
             _barnSlotData.GiveProductAt = GrowAt.AddSeconds(spawner.ProduceTime);
         }
 
-        public void Feed()
+        public bool AlowFeed()
         {
             var item = ItemReplicator.Get(SpawnerId);
-            if (item is not CreatureSpawner) return;
+            if (item is not CreatureSpawner) return false;
 
-            var spawner = (CreatureSpawner)item;
+            var spawner = (CreatureSpawner) item;
 
-            if (DateTime.Now < LastFeedAt.AddSeconds(spawner.FeedTime)) return;
+            return DateTime.Now >= LastFeedAt.AddSeconds(spawner.FeedTime);
+        }
 
-            LazyUpdateTimeMarker();
-
+        public void Feed()
+        {
             _barnSlotData.LastFeedAt = DateTime.Now;
         }
 

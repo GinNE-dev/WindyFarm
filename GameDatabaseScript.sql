@@ -22,6 +22,9 @@ CREATE TABLE Account (
     Email NVARCHAR(255) PRIMARY KEY,
     HashedPassword NVARCHAR(255) NOT NULL,
 );
+INSERT INTO Account (Email, HashedPassword) VALUES
+('gin2002fsh@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'),
+('gin2002fmt@gmail.com', '3c73d1c3df3a787fe626dc17cd4066e792ffa7152f6000242f0ebda89765638c')
 --DROP TABLE Account
 --DELETE FROM [DBO].Account WHERE Email = 'gin2002fmt@gmail.com'
 --SELECT * FROM Account
@@ -49,7 +52,6 @@ CREATE TABLE PlayerDat (
 --DELETE FROM [DBO].PlayerDat WHERE NOT DisplayName = 'Gin'
 --UPDATE PlayerDat  SET Gold = 100000
 --UPDATE PlayerDat SET Gender = 'Male'
-INSERT INTO Account (Email, HashedPassword) VALUES('gin2002fsh@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918')
 INSERT INTO PlayerDat (Id, DisplayName, Diamond, Gold, Level, Exp, Gender, PositionX, PositionY, PositionZ, MapId, AccountId) 
 VALUES('beb5642a-cfd3-462f-9633-24862e97a692', 'Gin', 99, 50000, 1, 0, 'Male', 57, 0, 30, 0, 'gin2002fsh@gmail.com')
 
