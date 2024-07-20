@@ -51,6 +51,14 @@ namespace WindyFarm.Gin.Network.Protocol
             Register(new BarnTransactionMessage());
             Register(new BarnSpawnAnimalMessage());
             Register(new BarnTransactionResultMessage());
+            Register(new EnterMapMessage());
+            Register(new EnterMapResultMessage());
+            Register(new PlayerJoinMapMessage());
+            Register(new PlayerLeaveMapMessage());
+            Register(new RequestDummiesInMapMessage());
+            Register(new DummyMovementMessage());   
+            Register(new TopListRequestMessage());
+            Register(new TopListDataMessage());
         }
 
         public bool Register(Message? message)

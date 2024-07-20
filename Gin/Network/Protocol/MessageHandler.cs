@@ -38,5 +38,13 @@ namespace WindyFarm.Gin.Network.Protocol
         public virtual bool handleBarnTransaction(BarnTransactionMessage message) => false;
         public virtual bool handleBarnSpawnAnimal(BarnSpawnAnimalMessage message) => false;
         public virtual bool handleBarnTransactionResult(BarnTransactionResultMessage message) => false;
+        public virtual bool handleEnterMap(EnterMapMessage message) => false;
+        public virtual bool handlePlayerJoinMap(PlayerJoinMapMessage message) => false;
+        public virtual bool handleEnterMapResult(EnterMapResultMessage message) => false;
+        public virtual bool handlePlayerLeaveMap(PlayerLeaveMapMessage message) => false;
+        public virtual bool handleRequestDummiesInMap(RequestDummiesInMapMessage message) => false;
+        public virtual bool handleDummyMovement(DummyMovementMessage message) => false;
+        public virtual bool handleTopListRequest(TopListRequestMessage message) => false;
+        public virtual bool handleTopListResponse(TopListDataMessage message) => false;
     }
 }

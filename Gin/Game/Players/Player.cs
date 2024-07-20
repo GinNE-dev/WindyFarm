@@ -3,11 +3,13 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using WindyFarm.Gin.Data;
 using WindyFarm.Gin.Game.Farming;
 using WindyFarm.Gin.Game.Items;
+using WindyFarm.Gin.Game.Maps;
 using WindyFarm.Gin.Network;
 using WindyFarm.Gin.Network.Protocol;
 using WindyFarm.Gin.Network.Protocol.Game;
@@ -38,18 +40,39 @@ namespace WindyFarm.Gin.Game.Players
         private readonly Server _server;
         private readonly Session _session;
         private readonly WindyFarmDatabaseContext _dbContext;
-        public readonly Farm FarmManager;
+        public readonly Farming.Farm FarmManager;
         public readonly Barn Barn;
+        public event Action<Player> OnDisconnect = delegate { };
+        public event Action<Vector3, Vector3> OnMove = delegate { };
         public Player(WindyFarmDatabaseContext dbContext, Server server, Session session, PlayerDat playerData)
         {
             _dbContext = dbContext;
             _playerData = playerData;
             _server = server;
             _session = session;
-
+            _session.OnDisconnect += HandleDisconnect;
             Inventory = new Inventory(this, _dbContext);
-            FarmManager = new Farm(this, _dbContext);
+            FarmManager = new Farming.Farm(this, _dbContext);
             Barn = new Barn(this, _dbContext);
+            JoinMap();
+        }
+
+        private void HandleDisconnect()
+        {
+            OnDisconnect(this);
+        }
+
+        public void JoinMap()
+        {
+            var map = MapManager.Instance.Get(MapId);
+            if (map is not null)
+            {
+                map.PlayerJoin(this);
+            }
+        }
+        public void ChangeMap(int  mapId)
+        {
+            _playerData.MapId = mapId;
         }
 
         public bool SendStats()
@@ -92,9 +115,12 @@ namespace WindyFarm.Gin.Game.Players
             if (m is null || m is not PlayerMovementMessage) return false;
 
             var movementMessage = (PlayerMovementMessage)m;
+            /*
             movementMessage.PositionX = this.PositionX;
             movementMessage.PositionY = this.PositionY;
             movementMessage.PositionZ = this.PositionZ;
+            */
+            movementMessage.Position = new Vector3((float) this.PositionX, (float) this.PositionY, (float) this.PositionZ);
 
             SendMessageAsync(movementMessage);
             return true;
@@ -120,6 +146,29 @@ namespace WindyFarm.Gin.Game.Players
             }
 
             return SendMessageAsync(m);
+        }
+
+        public void SendTopList(TopField topField)
+        {
+            TopListDataMessage messageData = new() { TopField = topField };
+
+            IQueryable<PlayerDat> topList;
+            switch (topField)
+            {
+                case TopField.Level:
+                    topList = _dbContext.PlayerDats.OrderByDescending(p => p.Level).Take(10);
+                    break;
+                default:
+                    topList = _dbContext.PlayerDats.OrderByDescending(p => p.Gold).Take(10);
+                    break;
+            }
+
+            messageData.PlayerIdList = [.. topList.Select(p => p.Id)];
+            messageData.DisplayNames = topList.Select(p => p.DisplayName).ToList();
+            messageData.GoldList = [.. topList.Select(p => p.Gold)];
+            messageData.Levels = [.. topList.Select(p => p.Level)];
+
+            SendMessageAsync(messageData);
         }
 
         public int LevelUpExp => (int)Math.Round(86.95 * Math.Pow(1.15, Level));
@@ -174,12 +223,14 @@ namespace WindyFarm.Gin.Game.Players
             _session.SendMessage(message);
         }
 
-        public void MoveTo(double x, double y, double z)
+        public void MoveTo(Vector3 position, Vector3 direction)
         {
-            _playerData.PositionX = x;
-            _playerData.PositionY = y;
-            _playerData.PositionZ = z;
+            _playerData.PositionX = position.X;
+            _playerData.PositionY = position.Y;
+            _playerData.PositionZ = position.Z;
+            OnMove(position, direction);
         }
+
 
         private object moneySafe = new();
         public bool GiveMoney(int amount)

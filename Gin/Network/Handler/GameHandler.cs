@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WindyFarm.Gin.Game.Items;
+using WindyFarm.Gin.Game.Maps;
 using WindyFarm.Gin.Game.Players;
 using WindyFarm.Gin.Game.Shop;
 using WindyFarm.Gin.Network.Protocol;
@@ -47,7 +48,11 @@ namespace WindyFarm.Gin.Network.Handler
 
         public override bool handlePlayerMovement(PlayerMovementMessage message)
         {
-            _player.MoveTo(message.PositionX, message.PositionY, message.PositionZ);
+            if (_player.MapId.Equals(message.MapId))
+            {
+                _player.MoveTo(message.Position, message.Direction);
+            }
+
             return true;
         }
 
@@ -209,6 +214,44 @@ namespace WindyFarm.Gin.Network.Handler
                     _player.Barn.HarvestAnimal(message.BarnSlotIdx);
                     break;
             }
+            return true;
+        }
+
+        public override bool handleEnterMap(EnterMapMessage message)
+        {
+            
+            Map? currentMap = MapManager.Instance.Get(_player.MapId);
+            if(currentMap is not null)
+            {
+                currentMap.PlayerLeave(_player);
+            }
+            
+            Map? enterMap = MapManager.Instance.Get(message.MapId);
+            if(enterMap is not null)
+            {
+                enterMap.PlayerJoin(_player);
+            }
+
+            return true;
+        }
+
+        public override bool handleRequestDummiesInMap(RequestDummiesInMapMessage message)
+        {
+            Map? map = MapManager.Instance.Get(_player.MapId);
+            if(map is null or not PublicMap)
+            {
+                GinLogger.Debug($"Map with id[{message.MapId}] is not found or not public map");
+            }
+            else
+            {
+                ((PublicMap)map).SendPlayersInMapToPlayer(_player);
+            }
+            return true;
+        }
+
+        public override bool handleTopListRequest(TopListRequestMessage message)
+        {
+            _player.SendTopList(message.TopField);
             return true;
         }
     }

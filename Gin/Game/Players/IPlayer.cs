@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using WindyFarm.Gin.Data;
@@ -29,6 +30,6 @@ namespace WindyFarm.Gin.Game.Players
         public int LevelUpExp { get; }
         public void GainExp(int amount);
         public bool SendMessageAsync(IMessage message);
-        public void MoveTo(double x, double y, double z);
+        public void MoveTo(Vector3 pos, Vector3 dir);
     }
 }
