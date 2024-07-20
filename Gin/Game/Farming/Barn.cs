@@ -31,7 +31,7 @@ namespace WindyFarm.Gin.Game.Farming
 
         public void InitBarn()
         {
-            var slotDataList = _dbContext.BarnDats;
+            var slotDataList = _dbContext.BarnDats.Where(d=>d.OwnerId.Equals(_owner.Id));
             for(int slotIdx = 0; slotIdx < BARN_CAPACITY; slotIdx++)
             {
                 var slotData = slotDataList.FirstOrDefault(s=>s.SlotIndex.Equals(slotIdx));

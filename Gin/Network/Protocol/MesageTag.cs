@@ -40,7 +40,15 @@
         FarmlandTransactionResult,
         FarmingShopData,
         BarnDataResponse,
-        BarnTransactionResult
+        BarnTransactionResult,
+        EnterMap,
+        EnterMapResult,
+        PlayerJoinMap,
+        PlayerLeaveMap,
+        RequestDummiesInMap,
+        DummyMovement,
+        TopListRequest,
+        TopListData
     }
 }
 

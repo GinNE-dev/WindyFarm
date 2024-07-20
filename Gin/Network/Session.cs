@@ -4,6 +4,7 @@ using System.Text;
 using WindyFarm.Gin.Core;
 using WindyFarm.Gin.Data;
 using WindyFarm.Gin.Game;
+using WindyFarm.Gin.Game.Maps;
 using WindyFarm.Gin.Game.Players;
 using WindyFarm.Gin.Network.Handler;
 using WindyFarm.Gin.Network.Protocol;
@@ -28,6 +29,7 @@ namespace WindyFarm.Gin.Network
         public Account? AccountData { get; private set; }
         private IPlayer? _player;
 
+        public event Action OnDisconnect = delegate{};
         private bool EncryptionReady => KeySentCompleted && EncryptKey != null && EncryptIV != null;
         public Session(Server server) : base(server)
         {
@@ -139,6 +141,7 @@ namespace WindyFarm.Gin.Network
             GinLogger.Info($"Client {SessionId} signed as {playerData?.DisplayName}");
             resultMessage.Result = LoginResult.Success;
             resultMessage.MapId = _player.MapId;
+
             SendMessageAsync(resultMessage);
         }
 
@@ -178,6 +181,7 @@ namespace WindyFarm.Gin.Network
 
         protected override void OnDisconnecting()
         {
+            OnDisconnect?.Invoke();
             AccountManager.Instance.Remove(AccountData);
             SessionManager.Instance.Remove(this);
             _server.SaveDataAsync();
