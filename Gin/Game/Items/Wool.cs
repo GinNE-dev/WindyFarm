@@ -10,7 +10,7 @@ namespace WindyFarm.Gin.Game.Items
     {
         public override int Id => ItemId.WOOL;
 
-        public override string Name => "'Wool";
+        public override string Name => "Wool";
 
         public override string Description => "Used to produce fabric";
     }

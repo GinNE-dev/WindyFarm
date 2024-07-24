@@ -45,7 +45,8 @@ CREATE TABLE PlayerDat (
     PositionZ FLOAT DEFAULT(0) NOT NULL,
     MapId INT DEFAULT(0) NOT NULL,
 	AccountId NVARCHAR(255) UNIQUE NOT NULL,
-	CONSTRAINT FK_PlayerDat_Account FOREIGN KEY (AccountId) REFERENCES Account(Email)
+	CONSTRAINT FK_PlayerDat_Account FOREIGN KEY (AccountId) REFERENCES Account(Email),
+	--LastActiveAt DATETIME DEFAULT GETDATE() NOT NULL
 );
 --DROP TABLE PlayerDat
 --SELECT * FROM [DBO].PlayerDat WHRERE Id = '54B35ACF-E588-47AC-B404-01A85D053C2F'
@@ -186,3 +187,29 @@ INSERT INTO FarmShop (SlotIndex, ItemId, BuyPrice) VALUES
 (10, 11, 1100), (11, 12, 1200), (12, 13, 1300), (13, 14, 1400), (14, 15, 1500),
 (15, 201, 100), (16, 301, 1000), (17, 202, 100), (18, 302, 200), (19, 303, 1000),
 (20, 304, 2000), (21, 305, 5000);
+
+
+CREATE TABLE CraftingSlotDat
+(
+	OwnerId UNIQUEIDENTIFIER,
+    SlotIndex INT CHECK (SlotIndex >= 0),
+	MaterialId INT CHECK (MaterialId >= 0) DEFAULT(0) NOT NULL,
+	MaterialQuality INT CHECK (MaterialQuality > 0) DEFAULT(1) NOT NULL,
+	InputAmount INT CHECK(InputAmount>=0) DEFAULT(0) NOT NULL,
+	CompleteAt DATETIME DEFAULT GETDATE() NOT NULL,
+	PRIMARY KEY (OwnerId, SlotIndex)
+)
+
+--DROP TABLE CraftingSlotDat
+--SELECT * FROM CraftingSlotDat
+
+CREATE TABLE FriendshipDat
+(
+	PlayerId UNIQUEIDENTIFIER NOT NULL,
+	FriendId UNIQUEIDENTIFIER NOT NULL,
+	FriendshipStatus VARCHAR(10) CHECK (FriendshipStatus IN ('Request', 'Friend')) DEFAULT('Request') NOT NULL,
+	AchieveRelationshipAt DATETIME DEFAULT GETDATE() NOT NULL,
+	FOREIGN KEY (PlayerId) REFERENCES PlayerDat(Id),
+	FOREIGN KEY (FriendId) REFERENCES PlayerDat(Id),
+	PRIMARY KEY (PlayerId, FriendId)
+)

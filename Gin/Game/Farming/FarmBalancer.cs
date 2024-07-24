@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WindyFarm.Gin.Game.Items;
+using WindyFarm.Gin.SystemLog;
 
 namespace WindyFarm.Gin.Game.Farming
 {
@@ -13,8 +14,10 @@ namespace WindyFarm.Gin.Game.Farming
         {
             if (cropQuality < 0) return 0;
             if (cropQuality > 5) return 5;
-
-            return new Random().Next(100) < (1+ extraChange/100.0) * 50.0/(cropQuality+1) ? cropQuality + 1 : cropQuality;  
+            int r = new Random().Next(100);
+            double p = (1 + extraChange / 100.0) * 50.0 / (cropQuality + 1);
+            //GinLogger.Print($"R:{r} P: {p} for q:{cropQuality + 1}");
+            return r < p ? cropQuality + 1 : cropQuality;  
         }
 
         public static int TillPlotEnergyConsumtion => 2;

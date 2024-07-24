@@ -59,6 +59,9 @@ namespace WindyFarm.Gin.Network.Protocol
             Register(new DummyMovementMessage());   
             Register(new TopListRequestMessage());
             Register(new TopListDataMessage());
+            Register(new CraftingSlotRequestMessage());
+            Register(new CraftingDataMessage());
+            Register(new FabricatorTransactionMessage());
         }
 
         public bool Register(Message? message)

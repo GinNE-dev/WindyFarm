@@ -254,5 +254,25 @@ namespace WindyFarm.Gin.Network.Handler
             _player.SendTopList(message.TopField);
             return true;
         }
+
+        public override bool handleCraftingSlotRequest(CraftingSlotRequestMessage message)
+        {
+            _player.Fabricator.SendCraftSlots();
+            return true;
+        }
+
+        public override bool handleFabricatorTransaction(FabricatorTransactionMessage message)
+        {
+            switch(message.Action)
+            {
+                case FabricatorAction.Craft:
+                    _player.Fabricator.Craft(message.MaterialId, message.MaterialMetaId, message.Amount);
+                    break;
+                case FabricatorAction.Complete:
+                    _player.Fabricator.TakeProduct(message.SlotIndex);
+                    break;
+            }
+            return true;
+        }
     }
 }
