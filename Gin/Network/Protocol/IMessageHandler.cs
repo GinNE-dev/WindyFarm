@@ -46,5 +46,8 @@ namespace WindyFarm.Gin.Network.Protocol
         bool handleDummyMovement(DummyMovementMessage message);
         bool handleTopListRequest(TopListRequestMessage message);
         bool handleTopListResponse(TopListDataMessage message);
+        bool handleCraftingSlotRequest(CraftingSlotRequestMessage message);
+        bool handleCraftingSlotResponse(CraftingDataMessage message);
+        bool handleFabricatorTransaction(FabricatorTransactionMessage message);
     }
 }

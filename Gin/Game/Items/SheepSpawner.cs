@@ -14,7 +14,7 @@ namespace WindyFarm.Gin.Game.Items
 
         public override int ProduceTime => 5;
 
-        public override Item HarvestProduct => ItemReplicator.Get(ItemId.WOOL);
+        public override Item HarvestProduct => ItemReplicator.Get(ItemId.FUR);
 
         public override int Id => ItemId.SHEEP_SPAWNER;
 

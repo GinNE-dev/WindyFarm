@@ -48,7 +48,10 @@
         RequestDummiesInMap,
         DummyMovement,
         TopListRequest,
-        TopListData
+        TopListData,
+        CraftingRequest,
+        CraftingData,
+        FabricatorTransaction
     }
 }
 

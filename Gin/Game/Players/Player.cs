@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using WindyFarm.Gin.Data;
+using WindyFarm.Gin.Game.Crafting;
 using WindyFarm.Gin.Game.Farming;
 using WindyFarm.Gin.Game.Items;
 using WindyFarm.Gin.Game.Maps;
@@ -41,6 +42,7 @@ namespace WindyFarm.Gin.Game.Players
         private readonly Session _session;
         private readonly WindyFarmDatabaseContext _dbContext;
         public readonly Farming.Farm FarmManager;
+        public readonly Fabricator Fabricator;
         public readonly Barn Barn;
         public event Action<Player> OnDisconnect = delegate { };
         public event Action<Vector3, Vector3> OnMove = delegate { };
@@ -54,6 +56,8 @@ namespace WindyFarm.Gin.Game.Players
             Inventory = new Inventory(this, _dbContext);
             FarmManager = new Farming.Farm(this, _dbContext);
             Barn = new Barn(this, _dbContext);
+            Fabricator = new Fabricator(this, _dbContext);
+
             JoinMap();
         }
 

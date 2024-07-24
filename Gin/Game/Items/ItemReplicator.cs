@@ -55,8 +55,12 @@ namespace WindyFarm.Gin.Game.Items
             Register(new PigSpawner());
             Register(new DuckEgg());
             Register(new Milk());
-            Register(new Wool());
+            Register(new Fur());
             Register(new Truffle());
+            Register(new Mayonnaise());
+            Register(new Cheese());
+            Register(new Wool());
+            Register(new TruffleOil());
         }
 
         public static bool Register(Item item)
@@ -127,7 +131,11 @@ namespace WindyFarm.Gin.Game.Items
         public readonly static int CHICKEN_EGG = 401;
         public readonly static int DUCK_EGG = 402;
         public readonly static int COW_MILK_JAR = 403;
-        public readonly static int WOOL = 404;
+        public readonly static int FUR = 404;
         public readonly static int TRUFFLE = 405;
+        public readonly static int MAYONNAISE = 406;
+        public readonly static int CHEESE = 407;
+        public readonly static int WOOL = 408;
+        public readonly static int TRUFFLE_OIL = 409;
     }
 }
