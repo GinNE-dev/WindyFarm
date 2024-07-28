@@ -62,6 +62,17 @@ namespace WindyFarm.Gin.Network.Protocol
             Register(new CraftingSlotRequestMessage());
             Register(new CraftingDataMessage());
             Register(new FabricatorTransactionMessage());
+            Register(new FriendListRequestMessage());
+            Register(new FriendListDataMessage());
+            Register(new FriendInviteListRequestMessage());
+            Register(new FriendInviteListDataMessage());
+            Register(new FriendInviteTransactionMessage());
+            Register(new FriendTransactionMessage());
+            Register(new MailBoxDataMessage());
+            Register(new MailBoxRequestMessage());
+            Register(new MailStreamDataMessage());
+            Register(new MailStreamRequestMessage());
+            Register(new MailTransactionMessage());
         }
 
         public bool Register(Message? message)

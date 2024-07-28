@@ -92,11 +92,11 @@ namespace WindyFarm.Gin.Game.Crafting
             if(m is null or not CraftingDataMessage) return;
 
             CraftingDataMessage cdm = (CraftingDataMessage)m;
-            cdm.MaterialIds.Clear();
-            cdm.CraftingTimers.Clear();
-            cdm.InputQuantities.Clear();
-            cdm.OutputQuantities.Clear();
-            cdm.Qualities.Clear();
+            cdm.MaterialIds = new();
+            cdm.CraftingTimers = new();
+            cdm.InputQuantities = new();
+            cdm.OutputQuantities = new();
+            cdm.Qualities = new();
 
             var slots = CraftingSlots.Values.OrderBy(cs=>cs.SlotIndex);
             foreach (var slot in slots)

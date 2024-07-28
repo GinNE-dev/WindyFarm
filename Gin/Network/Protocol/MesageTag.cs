@@ -51,7 +51,18 @@
         TopListData,
         CraftingRequest,
         CraftingData,
-        FabricatorTransaction
+        FabricatorTransaction,
+        FriendListRequest,
+        FriendListResponse,
+        FriendInviteListRequest,
+        FriendInviteListResponse,
+        FriendInviteTransaction,
+        FriendTransaction,
+        MailBoxRequest,
+        MailBoxResponse,
+        MailStreamRequest,
+        MailStreamResponse,
+        MailTransaction
     }
 }
 
