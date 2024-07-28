@@ -49,5 +49,16 @@ namespace WindyFarm.Gin.Network.Protocol
         bool handleCraftingSlotRequest(CraftingSlotRequestMessage message);
         bool handleCraftingSlotResponse(CraftingDataMessage message);
         bool handleFabricatorTransaction(FabricatorTransactionMessage message);
+        bool handleFriendListRequest(FriendListRequestMessage message);
+        bool handleFriendListResponse(FriendListDataMessage message);
+        bool handleFriendInviteListRequest(FriendInviteListRequestMessage message);
+        bool handleFriendInviteListResponse(FriendInviteListDataMessage message);
+        bool handleFriendInviteTransaction(FriendInviteTransactionMessage message);
+        bool handleFriendTransaction(FriendTransactionMessage message);
+        bool handleMailBoxRequest(MailBoxRequestMessage message);
+        bool handleMailBoxResponse(MailBoxDataMessage message);
+        bool handleMailStreamRequest(MailStreamRequestMessage message);
+        bool handleMailStreamResponse(MailStreamDataMessage message);
+        bool handleMailTransaction(MailTransactionMessage message);
     }
 }

@@ -49,5 +49,16 @@ namespace WindyFarm.Gin.Network.Protocol
         public virtual bool handleCraftingSlotRequest(CraftingSlotRequestMessage message) => false;
         public virtual bool handleCraftingSlotResponse(CraftingDataMessage message) => false;
         public virtual bool handleFabricatorTransaction(FabricatorTransactionMessage message) => false;
+        public virtual bool handleFriendListRequest(FriendListRequestMessage message) => false;
+        public virtual bool handleFriendListResponse(FriendListDataMessage message) => false;
+        public virtual bool handleFriendInviteListRequest(FriendInviteListRequestMessage message) => false;
+        public virtual bool handleFriendInviteListResponse(FriendInviteListDataMessage message) => false;
+        public virtual bool handleFriendInviteTransaction(FriendInviteTransactionMessage message) => false;
+        public virtual bool handleFriendTransaction(FriendTransactionMessage message) => false;
+        public virtual bool handleMailBoxRequest(MailBoxRequestMessage message) => false;
+        public virtual bool handleMailBoxResponse(MailBoxDataMessage message) => false;
+        public virtual bool handleMailStreamRequest(MailStreamRequestMessage message) => false;
+        public virtual bool handleMailStreamResponse(MailStreamDataMessage message) => false;
+        public virtual bool handleMailTransaction(MailTransactionMessage message) => false;
     }
 }

@@ -274,5 +274,73 @@ namespace WindyFarm.Gin.Network.Handler
             }
             return true;
         }
+        public override bool handleFriendListRequest(FriendListRequestMessage message)
+        {
+            _player.SendFriendList();
+            return true;
+        }
+
+        public override bool handleFriendInviteListRequest(FriendInviteListRequestMessage message)
+        {
+            _player.SendFriendInvitationList();
+            return true;
+        }
+
+        public override bool handleFriendInviteTransaction(FriendInviteTransactionMessage message)
+        {
+            switch(message.Action)
+            {
+                case FriendInviteAction.NewInvite:
+                    _player.InviteFriend(message.PlayerId);
+                break;
+                case FriendInviteAction.Accept:
+                    _player.AcceptFriendInviteFromPlayer(message.PlayerId);
+                break;
+                case FriendInviteAction.Reject:
+                    _player.RejectFriendInviteFromPlayer(message.PlayerId);
+                break;
+            }
+            return true;
+        }
+
+        public override bool handleFriendTransaction(FriendTransactionMessage message)
+        {
+            switch (message.Action)
+            {
+                case FriendAction.Unfriend:
+                    _player.Unfriend(message.PlayerId);
+                    break;
+                case FriendAction.Mail:
+                    _player.MailBox.AccessMailByPlayerId(message.PlayerId);
+                    break;
+            }
+            return true;   
+        }
+
+        public override bool handleMailBoxRequest(MailBoxRequestMessage message)
+        {
+            _player.MailBox.SendMailBox();
+            return true;
+        }
+
+        public override bool handleMailStreamRequest(MailStreamRequestMessage message)
+        {
+            _player.MailBox.AccessMail(message.MailId);
+            return true;
+        }
+
+        public override bool handleMailTransaction(MailTransactionMessage message)
+        {
+            switch(message.Action)
+            {
+                case MailAction.AddMessage:
+                    _player.MailBox.NewMessage(message.MailId, message.TextMessage);
+                    break;
+                case MailAction.Delete:
+                    _player.MailBox.MarkMailAsDeleted(message.MailId);
+                    break;
+            }
+            return true;
+        }
     }
 }

@@ -33,7 +33,7 @@ CREATE TABLE PlayerDat (
     Id UNIQUEIDENTIFIER PRIMARY KEY,
     DisplayName NVARCHAR(255) NOT NULL,
     Diamond INT CHECK (Diamond >= 0) DEFAULT(0)  NOT NULL,
-    Gold INT DEFAULT(0) CHECK (Gold >= 0) NOT NULL,
+    Gold INT DEFAULT(5000) CHECK (Gold >= 0) NOT NULL,
     Level INT  DEFAULT(1) CHECK (Level > 0) NOT NULL,
 	Energy INT CHECK(Energy>=0) DEFAULT(50) NOT NULL,
     Exp INT DEFAULT(0) CHECK (Exp >= 0) NOT NULL,
@@ -46,10 +46,10 @@ CREATE TABLE PlayerDat (
     MapId INT DEFAULT(0) NOT NULL,
 	AccountId NVARCHAR(255) UNIQUE NOT NULL,
 	CONSTRAINT FK_PlayerDat_Account FOREIGN KEY (AccountId) REFERENCES Account(Email),
-	--LastActiveAt DATETIME DEFAULT GETDATE() NOT NULL
+	LastActiveAt DATETIME DEFAULT GETDATE() NOT NULL
 );
 --DROP TABLE PlayerDat
---SELECT * FROM [DBO].PlayerDat WHRERE Id = '54B35ACF-E588-47AC-B404-01A85D053C2F'
+--SELECT * FROM PlayerDat WHRERE Id = '54B35ACF-E588-47AC-B404-01A85D053C2F'
 --DELETE FROM [DBO].PlayerDat WHERE NOT DisplayName = 'Gin'
 --UPDATE PlayerDat  SET Gold = 100000
 --UPDATE PlayerDat SET Gender = 'Male'
@@ -66,22 +66,22 @@ CREATE TABLE ItemDat
 INSERT INTO ItemDat(Id, ItemType, Quality) 
 VALUES
 --('00000000-0000-0000-0000-000000000000', 0, 1),
-('beb5642a-cfd3-462f-9633-24862e97a691', 1, 1),
-('beb5642a-cfd3-462f-9633-24862e97a692', 2, 2),
-('beb5642a-cfd3-462f-9633-24862e97a693', 3, 4),
-('beb5642a-cfd3-462f-9633-24862e97a694', 4, 3),
-('beb5642a-cfd3-462f-9633-24862e97a695', 5, 2),
-('beb5642a-cfd3-462f-9633-24862e97a696', 6, 2),
-('beb5642a-cfd3-462f-9633-24862e97a697', 7, 4),
-('beb5642a-cfd3-462f-9633-24862e97a698', 8, 3),
-('beb5642a-cfd3-462f-9633-24862e97a699', 9, 2),
-('beb5642a-cfd3-462f-9633-24862e97a69a', 10, 2),
-('beb5642a-cfd3-462f-9633-24862e97a69b', 11, 1),
-('beb5642a-cfd3-462f-9633-24862e97a69c', 12, 3),
-('beb5642a-cfd3-462f-9633-24862e97a69d', 13, 2),
-('beb5642a-cfd3-462f-9633-24862e97a69e', 14, 1),
-('beb5642a-cfd3-462f-9633-24862e97a69f', 15, 4),
-('beb5642a-cfd3-462f-9633-24862e97a201', 201, 4);
+('beb5642a-cfd3-462f-9633-24862e97a691', 1, 1);
+--('beb5642a-cfd3-462f-9633-24862e97a692', 2, 2),
+--('beb5642a-cfd3-462f-9633-24862e97a693', 3, 4),
+--('beb5642a-cfd3-462f-9633-24862e97a694', 4, 3),
+--('beb5642a-cfd3-462f-9633-24862e97a695', 5, 2),
+--('beb5642a-cfd3-462f-9633-24862e97a696', 6, 2),
+--('beb5642a-cfd3-462f-9633-24862e97a697', 7, 4),
+--('beb5642a-cfd3-462f-9633-24862e97a698', 8, 3),
+--('beb5642a-cfd3-462f-9633-24862e97a699', 9, 2),
+--('beb5642a-cfd3-462f-9633-24862e97a69a', 10, 2),
+--('beb5642a-cfd3-462f-9633-24862e97a69b', 11, 1),
+--('beb5642a-cfd3-462f-9633-24862e97a69c', 12, 3),
+--('beb5642a-cfd3-462f-9633-24862e97a69d', 13, 2),
+--('beb5642a-cfd3-462f-9633-24862e97a69e', 14, 1),
+--('beb5642a-cfd3-462f-9633-24862e97a69f', 15, 4),
+--('beb5642a-cfd3-462f-9633-24862e97a201', 201, 4);
 --SELECT * FROM ItemDat WHERE Id = '304913B9-BC83-41AF-8754-4CD1E018F3BE'
 --DELETE FROM ItemDat
 CREATE TABLE InventorySlotDat (
@@ -168,7 +168,7 @@ INSERT INTO ItemSellPrices (ItemId, BasePrice) VALUES
 (106, 900), (107, 1100), (108, 1500), (109, 2000), (110, 2100),
 (111, 2200), (112, 2300), (113, 2600), (114, 2800), (115, 3000),
 (201, 80), (301, 800), (202, 80), (401, 50), (402, 80), (403, 400),
-(404, 500), (405, 1000);
+(404, 500), (405, 1000), (406, 150), (407, 600), (408, 800), (409, 1500);
 
 --SELECT * FROM ItemSellPrices
 --DELETE FROM ItemSellPrices
@@ -206,10 +206,47 @@ CREATE TABLE CraftingSlotDat
 CREATE TABLE FriendshipDat
 (
 	PlayerId UNIQUEIDENTIFIER NOT NULL,
-	FriendId UNIQUEIDENTIFIER NOT NULL,
-	FriendshipStatus VARCHAR(10) CHECK (FriendshipStatus IN ('Request', 'Friend')) DEFAULT('Request') NOT NULL,
+	OtherPlayerId UNIQUEIDENTIFIER NOT NULL,
+	FriendshipStatus VARCHAR(10) CHECK (FriendshipStatus IN ('Invite', 'Friend')) DEFAULT('Invite') NOT NULL,
 	AchieveRelationshipAt DATETIME DEFAULT GETDATE() NOT NULL,
 	FOREIGN KEY (PlayerId) REFERENCES PlayerDat(Id),
-	FOREIGN KEY (FriendId) REFERENCES PlayerDat(Id),
-	PRIMARY KEY (PlayerId, FriendId)
+	FOREIGN KEY (OtherPlayerId) REFERENCES PlayerDat(Id),
+	PRIMARY KEY (PlayerId, OtherPlayerId)
 )
+
+--DROP TABLE CraftingSlotDat
+--SELECT * FROM CraftingSlotDat
+
+CREATE TABLE MailDat
+(
+	MailId UNIQUEIDENTIFIER PRIMARY KEY,
+	PlayerOneId UNIQUEIDENTIFIER NOT NULL,
+	PlayerTwoId UNIQUEIDENTIFIER NOT NULL,
+	PlayerOneTreat VARCHAR(16) CHECK(PlayerOneTreat IN ('New', 'Read', 'Deleted')) DEFAULT('New') NOT NULL,
+	PlayerTwoTreat VARCHAR(16) CHECK(PlayerTwoTreat IN ('New', 'Read', 'Deleted')) DEFAULT('New') NOT NULL,
+	UpdateAt DATETIME DEFAULT GETDATE() NOT NULL,
+	FOREIGN KEY (PlayerOneId) REFERENCES PlayerDat(Id),
+	FOREIGN KEY (PlayerTwoId) REFERENCES PlayerDat(Id)
+)
+
+--DROP TABLE MailDat
+--SELECT * FROM MailDat
+--DELETE FROM MailDat WHERE MailDat.MailId = '00000000-0000-0000-0000-000000000000'
+
+CREATE TABLE MailMessage
+(
+	Id UNIQUEIDENTIFIER PRIMARY KEY,
+	MailId UNIQUEIDENTIFIER NOT NULL,
+	SenderId UNIQUEIDENTIFIER NOT NULL,
+	ReceiverId UNIQUEIDENTIFIER NOT NULL,
+	MessageContent VARCHAR(256) NOT NULL,
+	SentAt DATETIME DEFAULT GETDATE() NOT NULL,
+	FOREIGN KEY (SenderId) REFERENCES PlayerDat(Id),
+	FOREIGN KEY (ReceiverId) REFERENCES PlayerDat(Id),
+	FOREIGN KEY (MailId) REFERENCES MailDat(MailId)
+)
+
+--DROP TABLE MailMessage
+--DELETE FROM MailMessage WHERE MailMessage.MailId In (SELECT MM.MailId FROM MailMessage MM INNER JOIN MailDat M ON MM.MailId = M.MailId WHERE M.MailId = '00000000-0000-0000-0000-000000000000')
+--SELECT * FROM MailMessage
+-- SELECT MM.MailId FROM MailMessage MM INNER JOIN MailDat M ON MM.MailId = M.MailId WHERE M.MailId = '00000000-0000-0000-0000-000000000000'

@@ -33,11 +33,25 @@ public partial class PlayerDat
 
     public string AccountId { get; set; } = null!;
 
+    public DateTime LastActiveAt { get; set; }
+
     public virtual Account Account { get; set; } = null!;
 
     public virtual ICollection<BarnDat> BarnDats { get; set; } = new List<BarnDat>();
 
     public virtual ICollection<FarmlandDat> FarmlandDats { get; set; } = new List<FarmlandDat>();
 
+    public virtual ICollection<FriendshipDat> FriendshipDatOtherPlayers { get; set; } = new List<FriendshipDat>();
+
+    public virtual ICollection<FriendshipDat> FriendshipDatPlayers { get; set; } = new List<FriendshipDat>();
+
     public virtual ICollection<InventorySlotDat> InventorySlotDats { get; set; } = new List<InventorySlotDat>();
+
+    public virtual ICollection<MailDat> MailDatPlayerOnes { get; set; } = new List<MailDat>();
+
+    public virtual ICollection<MailDat> MailDatPlayerTwos { get; set; } = new List<MailDat>();
+
+    public virtual ICollection<MailMessage> MailMessageReceivers { get; set; } = new List<MailMessage>();
+
+    public virtual ICollection<MailMessage> MailMessageSenders { get; set; } = new List<MailMessage>();
 }

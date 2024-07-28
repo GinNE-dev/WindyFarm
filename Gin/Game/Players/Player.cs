@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -10,6 +11,7 @@ using WindyFarm.Gin.Data;
 using WindyFarm.Gin.Game.Crafting;
 using WindyFarm.Gin.Game.Farming;
 using WindyFarm.Gin.Game.Items;
+using WindyFarm.Gin.Game.Mailing;
 using WindyFarm.Gin.Game.Maps;
 using WindyFarm.Gin.Network;
 using WindyFarm.Gin.Network.Protocol;
@@ -36,6 +38,7 @@ namespace WindyFarm.Gin.Game.Players
         public double PositionY => _playerData.PositionY;
         public double PositionZ => _playerData.PositionZ;
         public int MapId => _playerData.MapId;
+        public DateTime LastActiveAt => _playerData.LastActiveAt;
         public readonly Inventory Inventory;
         public readonly PlayerDat _playerData;
         private readonly Server _server;
@@ -44,8 +47,11 @@ namespace WindyFarm.Gin.Game.Players
         public readonly Farming.Farm FarmManager;
         public readonly Fabricator Fabricator;
         public readonly Barn Barn;
+        public readonly MailBox MailBox;
         public event Action<Player> OnDisconnect = delegate { };
         public event Action<Vector3, Vector3> OnMove = delegate { };
+        private readonly List<FriendshipDat> Friends = new();
+        private readonly List<FriendshipDat> FriendInvitations = new();
         public Player(WindyFarmDatabaseContext dbContext, Server server, Session session, PlayerDat playerData)
         {
             _dbContext = dbContext;
@@ -57,12 +63,16 @@ namespace WindyFarm.Gin.Game.Players
             FarmManager = new Farming.Farm(this, _dbContext);
             Barn = new Barn(this, _dbContext);
             Fabricator = new Fabricator(this, _dbContext);
-
+            MailBox = new MailBox(this, _dbContext);
+            LoadFriend();
             JoinMap();
+            OnlinePlayerManager.Instance.AddPlayer(this);
         }
 
         private void HandleDisconnect()
         {
+            OnlinePlayerManager.Instance.RemovePlayer(this);
+            _playerData.LastActiveAt = DateTime.Now;
             OnDisconnect(this);
         }
 
@@ -77,6 +87,161 @@ namespace WindyFarm.Gin.Game.Players
         public void ChangeMap(int  mapId)
         {
             _playerData.MapId = mapId;
+        }
+
+        private void LoadFriend()
+        {
+            var friendShips = _dbContext.FriendshipDats
+                .Include(f=>f.Player)
+                .Include(f=>f.OtherPlayer)
+                .Where(fs=>fs.PlayerId.Equals(this.Id) || fs.OtherPlayerId.Equals(this.Id))
+                .ToList();
+
+            foreach (var friendship in friendShips)
+            {
+                var loweredStatus = friendship.FriendshipStatus.ToLower();
+                if (loweredStatus.Equals("invite"))
+                {
+                    FriendInvitations.Add(friendship);
+                }
+                else if (loweredStatus.Equals("friend"))
+                {
+                    Friends.Add(friendship);
+                }
+            }
+        }
+
+        public void AcceptFriendInviteFromPlayer(Guid playerId)
+        {
+            GinLogger.Print($"AcceptFriendInviteFromPlayer: {_dbContext.FriendshipDats.Count()}");
+            var rs = FriendInvitations.FirstOrDefault(r=>r.PlayerId.Equals(playerId));
+            if (rs is null) return;
+            rs.FriendshipStatus = "Friend";
+            FriendInvitations.Remove(rs);
+            GinLogger.Print($"AcceptFriendInviteFromPlayer: {_dbContext.FriendshipDats.Count()}");
+            Friends.Add(rs);
+            SendFriendInvitationList();
+            GinLogger.Print($"AcceptFriendInviteFromPlayer: {_dbContext.FriendshipDats.Count()}");
+            var onlinePlayer = OnlinePlayerManager.Instance.GetPlayer(playerId);
+            if (onlinePlayer is null) return;
+            GinLogger.Print($"AcceptFriendInviteFromPlayer: {_dbContext.FriendshipDats.Count()}");
+            onlinePlayer.ReceiveFriendship(rs);
+        }
+
+        public void RejectFriendInviteFromPlayer(Guid playerId)
+        {
+            var rs = FriendInvitations.FirstOrDefault(r => r.PlayerId.Equals(playerId));
+            if (rs is null) return;
+            FriendInvitations.Remove(rs);
+            _dbContext.FriendshipDats.Remove(rs);
+            _dbContext.SaveChanges();
+
+            SendFriendInvitationList();
+        }
+
+        public void InviteFriend(Guid playerId)
+        {
+            var existed = _dbContext.FriendshipDats.FirstOrDefault(f=>
+            f.PlayerId.Equals(playerId) && f.OtherPlayerId.Equals(this.Id) ||
+            f.PlayerId.Equals(this.Id) && f.OtherPlayerId.Equals(playerId));
+
+            if (existed is not null) return;
+
+            var otherPlayerDat = _dbContext.PlayerDats.FirstOrDefault(p=>p.Id.Equals(playerId));
+            if(otherPlayerDat is null) return;
+            var friendShip = new FriendshipDat();
+            friendShip.PlayerId = this.Id;
+            friendShip.OtherPlayerId = playerId;
+            friendShip.Player = this._playerData;
+            friendShip.OtherPlayer = otherPlayerDat;
+            friendShip.FriendshipStatus = "Invite";
+            friendShip.AchieveRelationshipAt = DateTime.Now;
+
+            _dbContext.FriendshipDats.Add(friendShip);
+            _dbContext.SaveChanges();
+            GinLogger.Print($"InviteFriend: {_dbContext.FriendshipDats.Count()}");
+            var onlinePlayer = OnlinePlayerManager.Instance.GetPlayer(playerId);
+            if (onlinePlayer is null) return;
+            onlinePlayer.ReceiveFriendInviation(friendShip);
+        }
+
+        public void Unfriend(Guid friendId)
+        {
+            GinLogger.Print($"Unfriend: {_dbContext.FriendshipDats.Count()}");
+            var existedFriendship = _dbContext.FriendshipDats.FirstOrDefault(f =>
+            f.PlayerId.Equals(friendId) && f.OtherPlayerId.Equals(this.Id) ||
+            f.PlayerId.Equals(this.Id) && f.OtherPlayerId.Equals(friendId));
+            GinLogger.Print("Unfriend");
+            if(existedFriendship is null) return;
+            GinLogger.Print("Unfriend b");
+            _dbContext.FriendshipDats.Remove(existedFriendship);
+            _dbContext.SaveChanges();
+            Friends.Remove(existedFriendship);
+
+            SendFriendList();
+
+            var onlinePlayer = OnlinePlayerManager.Instance.GetPlayer(friendId);
+            if (onlinePlayer is null) return;
+            onlinePlayer.ReceiveUnfriend(existedFriendship);
+
+            
+        }
+
+        public void ReceiveFriendInviation(FriendshipDat invitation)
+        {
+            if(!FriendInvitations.Contains(invitation)) FriendInvitations.Add(invitation);
+        }
+
+        public void ReceiveFriendship(FriendshipDat invitation)
+        {
+            if (!Friends.Contains(invitation)) Friends.Add(invitation);
+        }
+
+        public void ReceiveUnfriend(FriendshipDat friendship)
+        {
+            Friends.Remove(friendship);
+        }
+
+        public void SendFriendList()
+        {
+            Message? m = MessagePool.Instance.Get(MessageTag.FriendListResponse);
+            if (m is null or not FriendListDataMessage) return;
+            var flm = (FriendListDataMessage)m;
+
+            flm.PlayerIds.Clear();
+            flm.PlayerNames.Clear();
+            flm.LastActiveTimes.Clear();
+
+            foreach(var friendshipDat in Friends)
+            {
+                var playerDat = friendshipDat.PlayerId.Equals(this.Id) ? friendshipDat.OtherPlayer : friendshipDat.Player;
+                flm.PlayerIds.Add(playerDat.Id);
+                flm.PlayerNames.Add(playerDat.DisplayName);
+                flm.LastActiveTimes.Add(OnlinePlayerManager.Instance.IsOnline(playerDat.Id) ? -1 : (int)(DateTime.Now - playerDat.LastActiveAt).TotalSeconds);
+            }
+
+            SendMessageAsync(flm);
+        }
+
+        public void SendFriendInvitationList()
+        {
+            Message? m = MessagePool.Instance.Get(MessageTag.FriendInviteListResponse);
+            if (m is null or not FriendInviteListDataMessage) return;
+            var flm = (FriendInviteListDataMessage)m;
+
+            flm.PlayerIds.Clear();
+            flm.PlayerNames.Clear();
+            flm.InviteAts.Clear();
+
+            foreach (var friendshipDat in FriendInvitations)
+            {
+                var playerDat = friendshipDat.Player;
+                flm.PlayerIds.Add(playerDat.Id);
+                flm.PlayerNames.Add(playerDat.DisplayName);
+                flm.InviteAts.Add(friendshipDat.AchieveRelationshipAt);
+            }
+
+            SendMessageAsync(flm);
         }
 
         public bool SendStats()
