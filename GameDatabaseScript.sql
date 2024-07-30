@@ -189,6 +189,20 @@ INSERT INTO FarmShop (SlotIndex, ItemId, BuyPrice) VALUES
 (20, 304, 2000), (21, 305, 5000);
 
 
+--SELECT * FROM CakeShop
+--DELETE FROM CakeShop
+--DROP TABLE CakeShop
+CREATE TABLE CakeShop
+(
+	SlotIndex INT PRIMARY KEY CHECK(SlotIndex>=0),
+	ItemId INT CHECK(ItemId>0) NOT NULL,
+	BuyPrice INT CHECK(BuyPrice>=0) NOT NULL
+)
+
+INSERT INTO CakeShop (SlotIndex, ItemId, BuyPrice) VALUES
+(0,414, 150), (1, 410, 200), (2, 412, 220), (3, 416, 250), (4, 413, 275), 
+(5, 415, 300), (6, 411, 400) 
+
 CREATE TABLE CraftingSlotDat
 (
 	OwnerId UNIQUEIDENTIFIER,

@@ -342,5 +342,65 @@ namespace WindyFarm.Gin.Network.Handler
             }
             return true;
         }
+
+        public override bool handleBakeryRequest(BakeryRequestMessage message)
+        {
+            var shop = ShopManager.Instance.Bakery;
+
+            if (shop is null)
+            {
+                GinLogger.Warning("FarmingShop is not innitialized!");
+                return false;
+            }
+
+            var shopDataMessage = shop.PrepareShopDataMessage();
+            if (shopDataMessage is null) return false;
+
+            return _player.SendMessageAsync(shopDataMessage);
+        }
+
+        public override bool handleBakeryTransaction(BakeryTransactionMessage message)
+        {
+            var shop = ShopManager.Instance.Bakery;
+            if (shop is null) return false;
+
+            switch (message.Action)
+            {
+                case BakeryAction.Buy:
+                    var buyItem = shop.GetItemAtSellingPlot(message.SlotIndex);
+                    buyItem.AssignMetaData(new Data.ItemDat() { Id = Guid.NewGuid(), ItemType = buyItem.Id, Quality = 1 });
+
+                    var payAmount = shop.GetBuyPrice(buyItem.Id) * message.Quantity;
+                    if (!_player.TryTakeMoney(payAmount)) return false;
+                    GinLogger.Info($"Player[{_player.DisplayName}] paid {payAmount} coins to buy [{buyItem.Id}:{buyItem.Name}]x{message.Quantity}");
+                    _player.SendStats();
+
+                    if (!_player.Inventory.TryPutItem(buyItem, message.Quantity)) return false;
+                    GinLogger.Info($"Player[{_player.DisplayName}] was received Item[{buyItem.Id}:{buyItem.Name}]x{message.Quantity}");
+
+                    _player.SendInventory();
+                    var shopDataMessage = shop.PrepareShopDataMessage();
+                    if (shopDataMessage is null) return false;
+                    _player.SendMessageAsync(shopDataMessage);
+                    break;
+                case BakeryAction.Sell:
+                    var sellItem = _player.Inventory.TryTakeItemAt<Item>(message.SlotIndex, message.Quantity);
+                    if (sellItem is null || sellItem is VoidItem) return false;
+                    GinLogger.Info($"Player[{_player.DisplayName}] was taken Item[{sellItem.Id}:{sellItem.Name}]x{message.Quantity}");
+                    _player.SendInventory();
+
+                    var sellPrice = shop.GetSellPrice(sellItem.Id);
+                    int receiveMoney = (int)Math.Floor(ShopBalancer.PriceFactorByQuality(sellItem.Quality) * sellPrice * message.Quantity);
+                    _player.GiveMoney(receiveMoney);
+                    GinLogger.Info($"Player[{_player.DisplayName}] was given {receiveMoney} coins after sell Item[Id={sellItem.Id},{sellItem.Name}:Quality={sellItem.Quality}]x{message.Quantity}");
+                    _player.SendStats();
+
+                    shopDataMessage = shop.PrepareShopDataMessage();
+                    if (shopDataMessage is null) return false;
+                    _player.SendMessageAsync(shopDataMessage);
+                    break;
+            }
+            return true;
+        }
     }
 }

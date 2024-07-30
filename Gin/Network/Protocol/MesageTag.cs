@@ -62,7 +62,10 @@
         MailBoxResponse,
         MailStreamRequest,
         MailStreamResponse,
-        MailTransaction
+        MailTransaction,
+        BakeryRequest,
+        BakeryResponse,
+        BakeryTransaction
     }
 }
 

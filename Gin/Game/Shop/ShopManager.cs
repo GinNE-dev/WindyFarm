@@ -13,6 +13,7 @@ namespace WindyFarm.Gin.Game.Shop
     {
        
         public FarmingShop? FarmingShop;
+        public Bakery? Bakery;
         private static ShopManager? instance;
         public static ShopManager Instance 
         {
@@ -39,6 +40,7 @@ namespace WindyFarm.Gin.Game.Shop
 
             instance = this;
             FarmingShop = new FarmingShop([.. dbContext.FarmShops], [..dbContext.ItemSellPrices]);
+            Bakery = new Bakery([.. dbContext.CakeShops], [.. dbContext.ItemSellPrices]);
         }
     }
 }

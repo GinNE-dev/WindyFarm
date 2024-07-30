@@ -60,5 +60,8 @@ namespace WindyFarm.Gin.Network.Protocol
         bool handleMailStreamRequest(MailStreamRequestMessage message);
         bool handleMailStreamResponse(MailStreamDataMessage message);
         bool handleMailTransaction(MailTransactionMessage message);
+        bool handleBakeryRequest(BakeryRequestMessage message);
+        bool handleBakeryResponse(BakeryDataMessage message);
+        bool handleBakeryTransaction(BakeryTransactionMessage message);
     }
 }
