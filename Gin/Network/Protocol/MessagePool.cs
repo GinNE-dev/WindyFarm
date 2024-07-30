@@ -73,6 +73,9 @@ namespace WindyFarm.Gin.Network.Protocol
             Register(new MailStreamDataMessage());
             Register(new MailStreamRequestMessage());
             Register(new MailTransactionMessage());
+            Register(new BakeryRequestMessage());
+            Register(new BakeryDataMessage());
+            Register(new BakeryTransactionMessage());
         }
 
         public bool Register(Message? message)

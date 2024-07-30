@@ -15,6 +15,8 @@ public partial class WindyFarmDatabaseContext : DbContext
 
     public virtual DbSet<BarnDat> BarnDats { get; set; }
 
+    public virtual DbSet<CakeShop> CakeShops { get; set; }
+
     public virtual DbSet<CraftingSlotDat> CraftingSlotDats { get; set; }
 
     public virtual DbSet<FarmShop> FarmShops { get; set; }
@@ -39,7 +41,7 @@ public partial class WindyFarmDatabaseContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Email).HasName("PK__Account__A9D105357470A65C");
+            entity.HasKey(e => e.Email).HasName("PK__Account__A9D10535908B8A81");
 
             entity.ToTable("Account");
 
@@ -49,7 +51,7 @@ public partial class WindyFarmDatabaseContext : DbContext
 
         modelBuilder.Entity<BarnDat>(entity =>
         {
-            entity.HasKey(e => new { e.OwnerId, e.SlotIndex }).HasName("PK__BarnDat__389A2CC4BAAEEDCA");
+            entity.HasKey(e => new { e.OwnerId, e.SlotIndex }).HasName("PK__BarnDat__389A2CC4452A11FA");
 
             entity.ToTable("BarnDat");
 
@@ -72,9 +74,18 @@ public partial class WindyFarmDatabaseContext : DbContext
                 .HasConstraintName("FK__BarnDat__OwnerId__00200768");
         });
 
+        modelBuilder.Entity<CakeShop>(entity =>
+        {
+            entity.HasKey(e => e.SlotIndex).HasName("PK__CakeShop__909A97CAF92A941B");
+
+            entity.ToTable("CakeShop");
+
+            entity.Property(e => e.SlotIndex).ValueGeneratedNever();
+        });
+
         modelBuilder.Entity<CraftingSlotDat>(entity =>
         {
-            entity.HasKey(e => new { e.OwnerId, e.SlotIndex }).HasName("PK__Crafting__389A2CC40972B97A");
+            entity.HasKey(e => new { e.OwnerId, e.SlotIndex }).HasName("PK__Crafting__389A2CC4E73EE0B5");
 
             entity.ToTable("CraftingSlotDat");
 
@@ -86,7 +97,7 @@ public partial class WindyFarmDatabaseContext : DbContext
 
         modelBuilder.Entity<FarmShop>(entity =>
         {
-            entity.HasKey(e => e.SlotIndex).HasName("PK__FarmShop__909A97CA6E87890B");
+            entity.HasKey(e => e.SlotIndex).HasName("PK__FarmShop__909A97CAF817276E");
 
             entity.ToTable("FarmShop");
 
@@ -95,7 +106,7 @@ public partial class WindyFarmDatabaseContext : DbContext
 
         modelBuilder.Entity<FarmlandDat>(entity =>
         {
-            entity.HasKey(e => new { e.OwnerId, e.PlotIndex }).HasName("PK__Farmland__19DA69EB1FAC0244");
+            entity.HasKey(e => new { e.OwnerId, e.PlotIndex }).HasName("PK__Farmland__19DA69EB364DC3F4");
 
             entity.ToTable("FarmlandDat");
 
@@ -116,7 +127,7 @@ public partial class WindyFarmDatabaseContext : DbContext
 
         modelBuilder.Entity<FriendshipDat>(entity =>
         {
-            entity.HasKey(e => new { e.PlayerId, e.OtherPlayerId }).HasName("PK__Friendsh__84317C9C0C2176A4");
+            entity.HasKey(e => new { e.PlayerId, e.OtherPlayerId }).HasName("PK__Friendsh__84317C9C6CA05CA4");
 
             entity.ToTable("FriendshipDat");
 
@@ -131,17 +142,17 @@ public partial class WindyFarmDatabaseContext : DbContext
             entity.HasOne(d => d.OtherPlayer).WithMany(p => p.FriendshipDatOtherPlayers)
                 .HasForeignKey(d => d.OtherPlayerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Friendshi__Other__1F98B2C1");
+                .HasConstraintName("FK__Friendshi__Other__18EBB532");
 
             entity.HasOne(d => d.Player).WithMany(p => p.FriendshipDatPlayers)
                 .HasForeignKey(d => d.PlayerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Friendshi__Playe__1EA48E88");
+                .HasConstraintName("FK__Friendshi__Playe__17F790F9");
         });
 
         modelBuilder.Entity<InventorySlotDat>(entity =>
         {
-            entity.HasKey(e => new { e.PlayerId, e.Slot }).HasName("PK__Inventor__3189CE5CFF593371");
+            entity.HasKey(e => new { e.PlayerId, e.Slot }).HasName("PK__Inventor__3189CE5C6652EA17");
 
             entity.ToTable("InventorySlotDat");
 
@@ -157,7 +168,7 @@ public partial class WindyFarmDatabaseContext : DbContext
 
         modelBuilder.Entity<ItemDat>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ItemDat__3214EC075CB68AAA");
+            entity.HasKey(e => e.Id).HasName("PK__ItemDat__3214EC074611E7C9");
 
             entity.ToTable("ItemDat");
 
@@ -167,14 +178,14 @@ public partial class WindyFarmDatabaseContext : DbContext
 
         modelBuilder.Entity<ItemSellPrice>(entity =>
         {
-            entity.HasKey(e => e.ItemId).HasName("PK__ItemSell__727E838B6AA70E3D");
+            entity.HasKey(e => e.ItemId).HasName("PK__ItemSell__727E838BD1A29AB8");
 
             entity.Property(e => e.ItemId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<MailDat>(entity =>
         {
-            entity.HasKey(e => e.MailId).HasName("PK__MailDat__09A8749A1B1209FE");
+            entity.HasKey(e => e.MailId).HasName("PK__MailDat__09A8749A3C441E7A");
 
             entity.ToTable("MailDat");
 
@@ -194,17 +205,17 @@ public partial class WindyFarmDatabaseContext : DbContext
             entity.HasOne(d => d.PlayerOne).WithMany(p => p.MailDatPlayerOnes)
                 .HasForeignKey(d => d.PlayerOneId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__MailDat__PlayerO__6FB49575");
+                .HasConstraintName("FK__MailDat__PlayerO__208CD6FA");
 
             entity.HasOne(d => d.PlayerTwo).WithMany(p => p.MailDatPlayerTwos)
                 .HasForeignKey(d => d.PlayerTwoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__MailDat__PlayerT__70A8B9AE");
+                .HasConstraintName("FK__MailDat__PlayerT__2180FB33");
         });
 
         modelBuilder.Entity<MailMessage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__MailMess__3214EC07ECC877BA");
+            entity.HasKey(e => e.Id).HasName("PK__MailMess__3214EC07212670D3");
 
             entity.ToTable("MailMessage");
 
@@ -219,32 +230,33 @@ public partial class WindyFarmDatabaseContext : DbContext
             entity.HasOne(d => d.Mail).WithMany(p => p.MailMessages)
                 .HasForeignKey(d => d.MailId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__MailMessa__MailI__76619304");
+                .HasConstraintName("FK__MailMessa__MailI__2739D489");
 
             entity.HasOne(d => d.Receiver).WithMany(p => p.MailMessageReceivers)
                 .HasForeignKey(d => d.ReceiverId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__MailMessa__Recei__756D6ECB");
+                .HasConstraintName("FK__MailMessa__Recei__2645B050");
 
             entity.HasOne(d => d.Sender).WithMany(p => p.MailMessageSenders)
                 .HasForeignKey(d => d.SenderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__MailMessa__Sende__74794A92");
+                .HasConstraintName("FK__MailMessa__Sende__25518C17");
         });
 
         modelBuilder.Entity<PlayerDat>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PlayerDa__3214EC07F4A492B5");
+            entity.HasKey(e => e.Id).HasName("PK__PlayerDa__3214EC071A18277D");
 
             entity.ToTable("PlayerDat");
 
-            entity.HasIndex(e => e.AccountId, "UQ__PlayerDa__349DA5A7758112C3").IsUnique();
+            entity.HasIndex(e => e.AccountId, "UQ__PlayerDa__349DA5A7049124E1").IsUnique();
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.AccountId).HasMaxLength(255);
             entity.Property(e => e.DisplayName).HasMaxLength(255);
             entity.Property(e => e.Energy).HasDefaultValue(50);
             entity.Property(e => e.Gender).HasMaxLength(50);
+            entity.Property(e => e.Gold).HasDefaultValue(5000);
             entity.Property(e => e.LastActiveAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");

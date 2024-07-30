@@ -61,6 +61,13 @@ namespace WindyFarm.Gin.Game.Items
             Register(new Cheese());
             Register(new Wool());
             Register(new TruffleOil());
+            Register(new Chocolate());
+            Register(new CupCake());
+            Register(new Cake());
+            Register(new IceCream());
+            Register(new Donut());
+            Register(new Cookie());
+            Register(new Brownie());
         }
 
         public static bool Register(Item item)
@@ -137,5 +144,12 @@ namespace WindyFarm.Gin.Game.Items
         public readonly static int CHEESE = 407;
         public readonly static int WOOL = 408;
         public readonly static int TRUFFLE_OIL = 409;
+        public readonly static int CHOCOLATE = 410;
+        public readonly static int CAKE = 411;
+        public readonly static int COOKIE = 412;
+        public readonly static int CUP_CAKE = 413;
+        public readonly static int DONUT = 414;
+        public readonly static int ICE_CREAM = 415;
+        public readonly static int BROWNIE = 416;
     }
 }
