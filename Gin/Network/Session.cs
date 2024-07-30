@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NetCoreServer;
+using System;
 using System.Text;
 using WindyFarm.Gin.Core;
 using WindyFarm.Gin.Data;
@@ -29,7 +30,7 @@ namespace WindyFarm.Gin.Network
         public Account? AccountData { get; private set; }
         private IPlayer? _player;
 
-        public event Action OnDisconnect = delegate{};
+        public event Action OnDisconnect = delegate { };
         private bool EncryptionReady => KeySentCompleted && EncryptKey != null && EncryptIV != null;
         public Session(Server server) : base(server)
         {
@@ -126,7 +127,7 @@ namespace WindyFarm.Gin.Network
             AccountData = account;
 
             PlayerDat? playerData = account.PlayerDat;
-     
+
             if (playerData == null)
             {
                 resultMessage.Result = LoginResult.MissingCharacter;
@@ -148,8 +149,61 @@ namespace WindyFarm.Gin.Network
         /// <summary>
         /// /////////////////////////////////////////////////////////////////////////////////////
         /// </summary>
+        private byte[] _buffer = new byte[8192]; // Increased buffer size
+        private int _bufferOffset = 0;
+        private int _messageLength = 0;
         protected override void OnReceived(byte[] buffer, long offset, long size)
         {
+            int bytesRead = (int)size;
+            int bufferOffset = (int)offset;
+
+            while (bytesRead > 0)
+            {
+                if (_messageLength == 0)
+                {
+                    if (_bufferOffset < 4)
+                    {
+                        int lengthToRead = Math.Min(4 - _bufferOffset, bytesRead);
+                        Array.Copy(buffer, bufferOffset, _buffer, _bufferOffset, lengthToRead);
+                        _bufferOffset += lengthToRead;
+                        bufferOffset += lengthToRead;
+                        bytesRead -= lengthToRead;
+
+                        if (_bufferOffset == 4)
+                        {
+                            _messageLength = BitConverter.ToInt32(_buffer, 0);
+                            _bufferOffset = 0;
+
+                            // If the message length is zero, reset for next message
+                            if (_messageLength == 0)
+                            {
+                                _messageLength = 0;
+                            }
+                        }
+                    }
+                }
+
+                if (_messageLength > 0)
+                {
+                    int lengthToRead = Math.Min(_messageLength - _bufferOffset, bytesRead);
+                    Array.Copy(buffer, bufferOffset, _buffer, _bufferOffset, lengthToRead);
+                    _bufferOffset += lengthToRead;
+                    bufferOffset += lengthToRead;
+                    bytesRead -= lengthToRead;
+
+                    if (_bufferOffset == _messageLength)
+                    {
+                        OnMessageReceived(_buffer, 0, _messageLength);
+                        _messageLength = 0;
+                        _bufferOffset = 0;
+                    }
+                }
+            }
+        }
+
+        private void OnMessageReceived(byte[] buffer, long offset, long size)
+        {
+
             byte[] data = new byte[(int)size];
             Array.Copy(buffer, 0, data, 0, (int)size);
             if (EncryptionReady)
@@ -208,26 +262,33 @@ namespace WindyFarm.Gin.Network
             return Send(message.Encode());
         }
 
-        public override long Send(byte[] buffer)
-        {
-            if (EncryptionReady)
-            {
-                buffer = EncryptionHelper.Encrypt(buffer, EncryptKey, EncryptIV);
-            }
-
-            return base.Send(buffer);
-        }
-
-        public override bool SendAsync(byte[] buffer)
+        private byte[] PrepareData(byte[] buffer)
         {
             if (DebugByte) GinLogger.Debug("RawBytes: " + string.Join(", ", buffer));
+
             if (EncryptionReady)
             {
                 buffer = EncryptionHelper.Encrypt(buffer, EncryptKey, EncryptIV);
                 if (DebugByte) GinLogger.Debug("EncryptedBytes: " + string.Join(", ", buffer));
             }
 
-            return base.SendAsync(buffer);
+            byte[] lengthPrefix = BitConverter.GetBytes(buffer.Length);
+
+            byte[] packet = new byte[lengthPrefix.Length + buffer.Length];
+            Array.Copy(lengthPrefix, 0, packet, 0, lengthPrefix.Length);
+            Array.Copy(buffer, 0, packet, lengthPrefix.Length, buffer.Length);
+
+            return packet;
+        }
+
+        public override long Send(byte[] buffer)
+        {
+            return base.Send(PrepareData(buffer));
+        }
+
+        public override bool SendAsync(byte[] buffer)
+        {
+            return base.SendAsync(PrepareData(buffer));
         }
     }
 }
