@@ -149,7 +149,7 @@ namespace WindyFarm.Gin.Network
         /// /////////////////////////////////////////////////////////////////////////////////////
         /// </summary>
         protected override void OnReceived(byte[] buffer, long offset, long size)
-        {
+        {   /*
             byte[] data = new byte[(int)size];
             Array.Copy(buffer, 0, data, 0, (int)size);
             if (EncryptionReady)
@@ -157,9 +157,9 @@ namespace WindyFarm.Gin.Network
                 if (DebugByte) GinLogger.Debug("ReceivedBytes: " + string.Join(", ", data));
                 data = EncryptionHelper.Decrypt(data, EncryptKey, EncryptIV);
                 if (DebugByte) GinLogger.Debug("DecryptedBytes: " + string.Join(", ", data));
-            }
+            }*/
 
-            string messageString = Encoding.UTF8.GetString(data);
+            string messageString = Encoding.UTF8.GetString(buffer, (int) offset, (int) size);
             GinLogger.Debug($"Received {messageString} from {SessionId}");
             Message? message = MessagePool.Instance.ParseMessage(messageString);
             if (message == null)
@@ -210,10 +210,12 @@ namespace WindyFarm.Gin.Network
 
         public override long Send(byte[] buffer)
         {
+            /*
             if (EncryptionReady)
             {
                 buffer = EncryptionHelper.Encrypt(buffer, EncryptKey, EncryptIV);
             }
+            */
 
             return base.Send(buffer);
         }
@@ -221,11 +223,12 @@ namespace WindyFarm.Gin.Network
         public override bool SendAsync(byte[] buffer)
         {
             if (DebugByte) GinLogger.Debug("RawBytes: " + string.Join(", ", buffer));
+            /*
             if (EncryptionReady)
             {
                 buffer = EncryptionHelper.Encrypt(buffer, EncryptKey, EncryptIV);
                 if (DebugByte) GinLogger.Debug("EncryptedBytes: " + string.Join(", ", buffer));
-            }
+            }*/
 
             return base.SendAsync(buffer);
         }

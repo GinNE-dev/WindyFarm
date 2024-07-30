@@ -7,6 +7,7 @@ namespace WindyFarm.Gin.Network.Utils
     {
         public static byte[] Encrypt(byte[] plainText, byte[] key, byte[] iv)
         {
+            /*
             using Aes aesAlg = Aes.Create();
             aesAlg.Key = key;
             aesAlg.IV = iv;
@@ -28,10 +29,13 @@ namespace WindyFarm.Gin.Network.Utils
             }
 
             return [];
+            */
+            return plainText;
         }
 
         public static byte[] Decrypt(byte[] cipherText, byte[] key, byte[] iv)
         {
+            /*
             using Aes aesAlg = Aes.Create();
             aesAlg.Key = key;
             aesAlg.IV = iv;
@@ -52,6 +56,8 @@ namespace WindyFarm.Gin.Network.Utils
                 GinLogger.Fatal(ex);
                 return [];
             }
+            */
+            return cipherText;
         }
 
         public static byte[] GenerateRandomKey(BlockSize keyBlockSize)
